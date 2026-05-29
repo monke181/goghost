@@ -9,16 +9,17 @@
 /* Begin PBXBuildFile section */
 		00A8B67AF6AF10A6DAC7F58D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55080AFCF67533F913969995 /* Assets.xcassets */; };
 		085EE8380549395DE68B33C6 /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903164D416B66882E3410E6E /* CheckInViewModel.swift */; };
-		09E689DA63A258843C409A5E /* InterVariable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71AC30ADC682A1220A19A026 /* InterVariable.ttf */; };
 		1BF9BAD1D91EEEBF1914D256 /* GGProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F31B1822D0A5029632AEE25 /* GGProgressRing.swift */; };
 		269EEC68BD1F389EAEE88D6C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6FA34298CD270BCB4AF500 /* SettingsView.swift */; };
 		284766162DA331C7BBEB6928 /* MorningCheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AE2DFBFE5472B886CFFFB /* MorningCheckInView.swift */; };
 		31D8DB773BF208071B80E36D /* WhySlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA57DEA40F26A5BECD7566 /* WhySlide.swift */; };
 		33936491A0C4B38427B50762 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1148158583E891673CF92E /* DashboardView.swift */; };
+		3721B209FC9AAB2A11499D84 /* IBMPlexMono-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5864DE1D6AAFB5A4AF378479 /* IBMPlexMono-Medium.otf */; };
 		37D42E06B12E7462E61F3C21 /* WelcomeSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25714ADD7B1F1BC2B5FEBBD5 /* WelcomeSlide.swift */; };
 		57D345011DB4E1D5CAB26682 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F82806295668D949D97E05 /* Run.swift */; };
 		59519BC4E1330646C3D72624 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684E17C6EC01BC980F1423B3 /* RootRouter.swift */; };
 		5F30E942ADB71F42A349F4E5 /* DailyEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E5B5A74C3DC7B4E70D7DA9 /* DailyEntry.swift */; };
+		6999E5AE9D66B182A897517F /* IBMPlexMono-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1772A61293C8BCA122529912 /* IBMPlexMono-Regular.otf */; };
 		6B586AD7B2A2CCFB03F1D0DC /* GGColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762F4A9FE52FF95934246F42 /* GGColors.swift */; };
 		77EE084CF96C63A0649B6441 /* NightCheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A671D1D4BC19F5D1A8D6E8BA /* NightCheckInView.swift */; };
 		7A829294138A6806BB77C2F6 /* GGButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D39988B71499CD8EFF8FF48 /* GGButton.swift */; };
@@ -26,20 +27,22 @@
 		823A4623FA7E23CB40D8A5AF /* MainAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8D6E5E40008A7D9B98A553 /* MainAppView.swift */; };
 		90F545781968D6E154DAAE80 /* NameRunSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F77EF6ED4EE39C2DE94C95 /* NameRunSlide.swift */; };
 		929F09AC03AF3D4D6528DFFB /* RatingPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DF6CE2483DD2A381C99688 /* RatingPicker.swift */; };
+		92D8F7D851598FE72E038E9F /* IBMPlexMono-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2ED762AD0B281E4DB420BA9D /* IBMPlexMono-SemiBold.otf */; };
 		93915C585B6479DAD69B4200 /* GhostModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56446E7681F811308780F636 /* GhostModeView.swift */; };
 		94BA3FB859D53709A5C80183 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D63CCF2067B7C01297AD8C /* AppState.swift */; };
 		94C25374FF45C1C00E8AD7BA /* GGAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6B16EC3B4B587E3A5E9C8E /* GGAnimations.swift */; };
 		9544AD2E7C1532024467B5A5 /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FB024A46754423D6F929 /* OnboardingContainerView.swift */; };
 		98A1E72B88A921AF20FEBDF9 /* LaunchSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479B68D66F23E33BE004AA66 /* LaunchSlide.swift */; };
 		9DDDBDF2BE359016F5A0B7A6 /* GGTimerDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20E4AFFB1962EDDF2B8A8E7 /* GGTimerDisplay.swift */; };
-		A966AC3F25CC320DFAC94A56 /* InterDisplay-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 25F1AD4071CFAD0177DBF1AD /* InterDisplay-Black.ttf */; };
 		B5B06A7090F52B3D0DA7DC03 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1FA978E4C0AAEE65D8E425 /* FocusSession.swift */; };
 		B7BDD991DFB4285745883336 /* GGMomentumBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C725ABB7D4C52965C67468 /* GGMomentumBar.swift */; };
+		BCF19BB9FE7E92AB94825F5F /* IBMPlexMono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C4684F889881BD39152E1826 /* IBMPlexMono-Bold.otf */; };
 		C23B205F0E64EB6924C358B5 /* GoGhostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9980EBD84AFE3D345059144 /* GoGhostApp.swift */; };
 		C9E75DDE5A9419D626977035 /* GGFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9016F80822A3F154B86521 /* GGFonts.swift */; };
 		CC7E46DFB4FBFD136D420399 /* FocusArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1925D657CBC92473802A466C /* FocusArea.swift */; };
 		D41F27338AB77E365CD98CFF /* GoGhostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */; };
 		D4F5D4C1D671D76EBA12F2CE /* GGCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D4AA063A2AF71FF188C129 /* GGCard.swift */; };
+		D595464AA3DFFF11A4E352BA /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */; };
 		D94DF04D6038C49077530EAD /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19014FECB783B41AEC839598 /* OnboardingViewModel.swift */; };
 		DA49D6076366FCCCC2AB04D0 /* GhostModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54878320BB95DAD811222EC8 /* GhostModeViewModel.swift */; };
 		F8E53AF252974586499598CC /* FocusAreasSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */; };
@@ -58,13 +61,14 @@
 
 /* Begin PBXFileReference section */
 		09003748A3A7E2E71637AC46 /* GGBottomNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGBottomNav.swift; sourceTree = "<group>"; };
+		1772A61293C8BCA122529912 /* IBMPlexMono-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Regular.otf"; sourceTree = "<group>"; };
 		19014FECB783B41AEC839598 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		1925D657CBC92473802A466C /* FocusArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusArea.swift; sourceTree = "<group>"; };
 		1E21FB024A46754423D6F929 /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
 		24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoGhostTests.swift; sourceTree = "<group>"; };
 		25714ADD7B1F1BC2B5FEBBD5 /* WelcomeSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSlide.swift; sourceTree = "<group>"; };
-		25F1AD4071CFAD0177DBF1AD /* InterDisplay-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "InterDisplay-Black.ttf"; sourceTree = "<group>"; };
 		2E9016F80822A3F154B86521 /* GGFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGFonts.swift; sourceTree = "<group>"; };
+		2ED762AD0B281E4DB420BA9D /* IBMPlexMono-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-SemiBold.otf"; sourceTree = "<group>"; };
 		33108387EAD6A0C75C75D07D /* GoGhostTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoGhostTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		36F82806295668D949D97E05 /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
 		479B68D66F23E33BE004AA66 /* LaunchSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchSlide.swift; sourceTree = "<group>"; };
@@ -72,8 +76,9 @@
 		54878320BB95DAD811222EC8 /* GhostModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostModeViewModel.swift; sourceTree = "<group>"; };
 		55080AFCF67533F913969995 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		56446E7681F811308780F636 /* GhostModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostModeView.swift; sourceTree = "<group>"; };
+		5864DE1D6AAFB5A4AF378479 /* IBMPlexMono-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Medium.otf"; sourceTree = "<group>"; };
+		5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
 		684E17C6EC01BC980F1423B3 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
-		71AC30ADC682A1220A19A026 /* InterVariable.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = InterVariable.ttf; sourceTree = "<group>"; };
 		7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreasSlide.swift; sourceTree = "<group>"; };
 		75DF6CE2483DD2A381C99688 /* RatingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPicker.swift; sourceTree = "<group>"; };
 		762F4A9FE52FF95934246F42 /* GGColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGColors.swift; sourceTree = "<group>"; };
@@ -92,6 +97,7 @@
 		A7C725ABB7D4C52965C67468 /* GGMomentumBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGMomentumBar.swift; sourceTree = "<group>"; };
 		AA5AE2DFBFE5472B886CFFFB /* MorningCheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningCheckInView.swift; sourceTree = "<group>"; };
 		B89161AE81D8DE0056B8C60E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C4684F889881BD39152E1826 /* IBMPlexMono-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Bold.otf"; sourceTree = "<group>"; };
 		C9980EBD84AFE3D345059144 /* GoGhostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoGhostApp.swift; sourceTree = "<group>"; };
 		D3D4AA063A2AF71FF188C129 /* GGCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGCard.swift; sourceTree = "<group>"; };
 		D9E5B5A74C3DC7B4E70D7DA9 /* DailyEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEntry.swift; sourceTree = "<group>"; };
@@ -156,8 +162,11 @@
 		655DF6344026410532E281E9 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				25F1AD4071CFAD0177DBF1AD /* InterDisplay-Black.ttf */,
-				71AC30ADC682A1220A19A026 /* InterVariable.ttf */,
+				5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */,
+				C4684F889881BD39152E1826 /* IBMPlexMono-Bold.otf */,
+				5864DE1D6AAFB5A4AF378479 /* IBMPlexMono-Medium.otf */,
+				1772A61293C8BCA122529912 /* IBMPlexMono-Regular.otf */,
+				2ED762AD0B281E4DB420BA9D /* IBMPlexMono-SemiBold.otf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -358,8 +367,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				00A8B67AF6AF10A6DAC7F58D /* Assets.xcassets in Resources */,
-				A966AC3F25CC320DFAC94A56 /* InterDisplay-Black.ttf in Resources */,
-				09E689DA63A258843C409A5E /* InterVariable.ttf in Resources */,
+				D595464AA3DFFF11A4E352BA /* BebasNeue-Regular.ttf in Resources */,
+				BCF19BB9FE7E92AB94825F5F /* IBMPlexMono-Bold.otf in Resources */,
+				3721B209FC9AAB2A11499D84 /* IBMPlexMono-Medium.otf in Resources */,
+				6999E5AE9D66B182A897517F /* IBMPlexMono-Regular.otf in Resources */,
+				92D8F7D851598FE72E038E9F /* IBMPlexMono-SemiBold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

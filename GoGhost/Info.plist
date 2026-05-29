@@ -24,8 +24,11 @@
 	<string>GoGhost sends daily check-in reminders.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>InterVariable.ttf</string>
-		<string>InterDisplay-Black.ttf</string>
+		<string>BebasNeue-Regular.ttf</string>
+		<string>IBMPlexMono-Regular.otf</string>
+		<string>IBMPlexMono-Medium.otf</string>
+		<string>IBMPlexMono-SemiBold.otf</string>
+		<string>IBMPlexMono-Bold.otf</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>

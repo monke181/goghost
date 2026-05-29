@@ -11,19 +11,14 @@ struct MorningCheckInView: View {
         ZStack {
             GGColors.background.ignoresSafeArea()
 
-            if vm.isComplete {
-                completionView
-                    .transition(.opacity)
-            } else {
-                VStack(spacing: 0) {
-                    stepContent
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .move(edge: .leading).combined(with: .opacity)
-                        ))
-                        .id(vm.step)
-                }
+            VStack(spacing: 0) {
+                stepContent
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    ))
+                    .id(vm.step)
             }
         }
         .interactiveDismissDisabled(!vm.isComplete)
@@ -40,45 +35,45 @@ struct MorningCheckInView: View {
         }
     }
 
-    // MARK: Step 0 — Opener
     private var openerStep: some View {
         slideShell {
-            VStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("DAY \(run.dayNumber)")
-                    .font(GGFonts.counterMedium)
+                    .font(GGFonts.display)
                     .foregroundStyle(GGColors.textPrimary)
-
-                Text("Morning.")
-                    .font(GGFonts.title)
-                    .foregroundStyle(GGColors.textSecondary)
+                Text("MORNING.")
+                    .font(GGFonts.headline)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
             }
         } action: {
             GGPrimaryButton(title: "LET'S GO", action: vm.advance)
         }
     }
 
-    // MARK: Step 1 — Goals
     private var goalsStep: some View {
         slideShell {
             VStack(alignment: .leading, spacing: 16) {
-                Text("What are you getting done today?")
-                    .font(GGFonts.headline)
+                Text("WHAT ARE YOU\nGETTING DONE TODAY?")
+                    .font(GGFonts.title)
                     .foregroundStyle(GGColors.textPrimary)
+                    .lineSpacing(2)
 
-                ForEach(Array(zip([1,2,3], [$vm.goal1, $vm.goal2, $vm.goal3])), id: \.0) { num, binding in
-                    HStack(spacing: 12) {
-                        Text("\(num).")
-                            .font(GGFonts.bodyMedium)
-                            .foregroundStyle(GGColors.textTertiary)
-                            .frame(width: 20)
+                VStack(spacing: 8) {
+                    ForEach(Array(zip([1,2,3], [$vm.goal1, $vm.goal2, $vm.goal3])), id: \.0) { num, binding in
+                        HStack(spacing: 10) {
+                            Text("\(num)")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textTertiary)
+                                .frame(width: 16)
 
-                        TextField("", text: binding, prompt: Text("Intention \(num)").foregroundColor(GGColors.textTertiary))
-                            .font(GGFonts.body)
-                            .foregroundStyle(GGColors.textPrimary)
-                            .padding(.vertical, 14)
-                            .padding(.horizontal, 12)
-                            .background(GGColors.surfaceElevated)
-                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            TextField("", text: binding, prompt: Text("—").foregroundColor(GGColors.textTertiary))
+                                .font(GGFonts.body)
+                                .foregroundStyle(GGColors.textPrimary)
+                                .padding(12)
+                                .background(GGColors.surface)
+                                .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
+                        }
                     }
                 }
             }
@@ -89,14 +84,13 @@ struct MorningCheckInView: View {
         }
     }
 
-    // MARK: Step 2 — Motivation
     private var motivationStep: some View {
         slideShell {
             VStack(alignment: .leading, spacing: 20) {
-                Text("How locked in are you right now?")
-                    .font(GGFonts.headline)
+                Text("HOW LOCKED IN\nARE YOU RIGHT NOW?")
+                    .font(GGFonts.title)
                     .foregroundStyle(GGColors.textPrimary)
-
+                    .lineSpacing(2)
                 RatingPicker(value: $vm.motivationLevel, max: 10)
             }
         } action: {
@@ -104,88 +98,94 @@ struct MorningCheckInView: View {
         }
     }
 
-    // MARK: Step 3 — Focus area
     private var focusAreaStep: some View {
         slideShell {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Lead with which area today?")
-                    .font(GGFonts.headline)
+                Text("LEAD WITH WHICH\nAREA TODAY?")
+                    .font(GGFonts.title)
                     .foregroundStyle(GGColors.textPrimary)
+                    .lineSpacing(2)
 
-                FlowLayout(spacing: 8) {
+                VStack(spacing: 0) {
                     ForEach(run.focusAreas, id: \.self) { area in
+                        let isSelected = vm.selectedFocusArea == area
                         Button {
                             vm.selectedFocusArea = area
                         } label: {
-                            Text(area.uppercased())
-                                .font(GGFonts.label)
-                                .tightTracking()
-                                .foregroundStyle(vm.selectedFocusArea == area ? GGColors.background : GGColors.textSecondary)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 10)
-                                .background(vm.selectedFocusArea == area ? GGColors.accent : GGColors.surfaceElevated)
-                                .clipShape(Capsule())
+                            HStack {
+                                Text(area.uppercased())
+                                    .font(GGFonts.bodyMed)
+                                    .foregroundStyle(isSelected ? GGColors.textPrimary : GGColors.textSecondary)
+                                    .tightTracking()
+                                Spacer()
+                                if isSelected {
+                                    Rectangle()
+                                        .fill(GGColors.accent)
+                                        .frame(width: 8, height: 8)
+                                }
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 16)
                         }
                         .buttonStyle(.plain)
+                        .background(isSelected ? GGColors.surface : .clear)
+
+                        if area != run.focusAreas.last {
+                            Rectangle().fill(GGColors.border).frame(height: 1)
+                        }
                     }
                 }
+                .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
             }
         } action: {
-            GGPrimaryButton(title: "NEXT") {
-                if vm.selectedFocusArea.isEmpty && !run.focusAreas.isEmpty {
-                    vm.selectedFocusArea = run.focusAreas[0]
+            GGPrimaryButton(title: "DONE") {
+                if vm.selectedFocusArea.isEmpty, let first = run.focusAreas.first {
+                    vm.selectedFocusArea = first
                 }
                 let entry = todayEntry(for: run, context: context)
                 vm.save(to: entry, context: context)
+                vm.advance()
             }
         }
     }
 
-    // MARK: Step 4 — Confirmation
     private var confirmationStep: some View {
-        slideShell {
-            VStack(spacing: 20) {
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 32))
+        VStack(alignment: .leading, spacing: 0) {
+            Spacer()
+
+            VStack(alignment: .leading, spacing: 20) {
+                Text("LOCKED IN.")
+                    .font(GGFonts.display)
                     .foregroundStyle(GGColors.accent)
 
-                Text("You're locked in.")
-                    .font(GGFonts.title)
-                    .foregroundStyle(GGColors.textPrimary)
+                Rectangle().fill(GGColors.border).frame(height: 1)
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 10) {
                     ForEach([vm.goal1, vm.goal2, vm.goal3].filter { !$0.isEmpty }, id: \.self) { g in
-                        HStack(spacing: 8) {
-                            Circle().fill(GGColors.accent).frame(width: 4, height: 4)
-                            Text(g).font(GGFonts.body).foregroundStyle(GGColors.textSecondary)
+                        HStack(alignment: .top, spacing: 10) {
+                            Text("—")
+                                .font(GGFonts.body)
+                                .foregroundStyle(GGColors.textTertiary)
+                            Text(g)
+                                .font(GGFonts.body)
+                                .foregroundStyle(GGColors.textSecondary)
                         }
                     }
                 }
             }
-        } action: {
-            GGPrimaryButton(title: "CLOSE", action: { dismiss() })
-        }
-    }
+            .padding(.horizontal, 32)
 
-    private var completionView: some View {
-        VStack(spacing: 24) {
             Spacer()
-            Image(systemName: "lock.fill")
-                .font(.system(size: 40))
-                .foregroundStyle(GGColors.accent)
-            Text("Locked in.")
-                .font(GGFonts.display)
-                .foregroundStyle(GGColors.textPrimary)
-            Spacer()
+
             GGPrimaryButton(title: "CLOSE") { dismiss() }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 56)
         }
     }
 
-    private func slideShell<Content: View, Action: View>(
-        @ViewBuilder content: () -> Content,
-        @ViewBuilder action: () -> Action
+    private func slideShell<C: View, A: View>(
+        @ViewBuilder content: () -> C,
+        @ViewBuilder action: () -> A
     ) -> some View {
         VStack(spacing: 0) {
             Spacer()

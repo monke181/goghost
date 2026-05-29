@@ -8,13 +8,16 @@ struct GGPrimaryButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(GGFonts.headline)
+                .font(GGFonts.label)
                 .tightTracking()
                 .foregroundStyle(isDestructive ? GGColors.danger : GGColors.background)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
-                .background(isDestructive ? GGColors.danger.opacity(0.15) : GGColors.accent)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(isDestructive ? .clear : GGColors.textPrimary)
+                .overlay(
+                    Rectangle()
+                        .stroke(isDestructive ? GGColors.danger : GGColors.textPrimary, lineWidth: 1)
+                )
         }
         .buttonStyle(.plain)
     }
@@ -27,15 +30,14 @@ struct GGSecondaryButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(GGFonts.headline)
+                .font(GGFonts.label)
                 .tightTracking()
                 .foregroundStyle(GGColors.textPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 18)
-                .background(GGColors.surfaceElevated)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .background(.clear)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    Rectangle()
                         .stroke(GGColors.border, lineWidth: 1)
                 )
         }

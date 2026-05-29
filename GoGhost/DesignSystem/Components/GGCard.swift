@@ -1,12 +1,16 @@
 import SwiftUI
 
+// Sharp-cornered card — 1px border, minimal fill, no rounding
 struct GGCardModifier: ViewModifier {
     var padding: CGFloat = 16
     func body(content: Content) -> some View {
         content
             .padding(padding)
-            .background(GGColors.surfaceElevated)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(GGColors.surface)
+            .overlay(
+                Rectangle()
+                    .stroke(GGColors.border, lineWidth: 1)
+            )
     }
 }
 

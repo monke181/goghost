@@ -10,28 +10,25 @@ struct MainAppView: View {
     @State private var selectedTab: AppTab = .dashboard
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Group {
+        VStack(spacing: 0) {
+            // Content
+            ZStack {
                 switch selectedTab {
                 case .dashboard:
-                    NavigationStack {
-                        DashboardView()
-                    }
+                    NavigationStack { DashboardView() }
                 case .ghostMode:
-                    NavigationStack {
-                        GhostModeView()
-                    }
+                    NavigationStack { GhostModeView() }
                 case .settings:
-                    NavigationStack {
-                        SettingsView()
-                    }
+                    NavigationStack { SettingsView() }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
+            // Tab bar — flat, no capsule
             GGBottomNav(selectedTab: $selectedTab)
+                .background(GGColors.background)
         }
         .background(GGColors.background)
-        .ignoresSafeArea()
+        .ignoresSafeArea(edges: .top)
     }
 }

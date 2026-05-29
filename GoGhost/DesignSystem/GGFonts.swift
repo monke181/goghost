@@ -1,40 +1,47 @@
 import SwiftUI
 
+// Bebas Neue — display/hero only. All caps condensed.
+// IBM Plex Mono — everything else. Terminal feel.
+
 struct GGFonts {
-    // PostScript names
-    private static let inter         = "InterVariable"
-    private static let interDisplay  = "InterDisplay-Black"
+    private static let bebas   = "BebasNeue-Regular"
+    private static let mono    = "IBMPlexMono-Regular"
+    private static let monoMed = "IBMPlexMono-Medium"
+    private static let monoSemi = "IBMPlexMono-SemiBold"
+    private static let monoBold = "IBMPlexMono-Bold"
 
-    // Counter — large monospaced numbers (day counter, score, timer)
-    static let counter = Font.custom(interDisplay, size: 80)
-        .monospacedDigit()
-    static let counterMedium = Font.custom(interDisplay, size: 48)
-        .monospacedDigit()
-    static let counterSmall = Font.custom(inter, size: 32)
-        .monospacedDigit()
+    // Hero — Bebas Neue only (day counter, timers, major display numbers)
+    static let hero     = Font.custom(bebas, size: 96)
+    static let counter  = Font.custom(bebas, size: 80)
+    static let display  = Font.custom(bebas, size: 48)
+    static let title    = Font.custom(bebas, size: 32)
 
-    // Display
-    static let display = Font.custom(inter, size: 34).weight(.black)
-    static let title   = Font.custom(inter, size: 22).weight(.bold)
-    static let headline = Font.custom(inter, size: 17).weight(.semibold)
+    // Body — IBM Plex Mono
+    static let headline  = Font.custom(monoSemi, size: 15)
+    static let body      = Font.custom(mono, size: 14)
+    static let bodyMed   = Font.custom(monoMed, size: 14)
+    static let label     = Font.custom(monoSemi, size: 11)
+    static let caption   = Font.custom(mono, size: 11)
 
-    // Body
-    static let body       = Font.custom(inter, size: 15).weight(.regular)
-    static let bodyMedium = Font.custom(inter, size: 15).weight(.medium)
-
-    // Labels
-    static let label   = Font.custom(inter, size: 11).weight(.bold)
-    static let caption = Font.custom(inter, size: 12).weight(.medium)
+    // Mono bold for scores/numbers in body context
+    static let counterSmall = Font.custom(bebas, size: 36)
+    static let counterMedium = Font.custom(bebas, size: 56)
 }
 
-struct TightTracking: ViewModifier {
+// Used on Bebas Neue labels to add breathing room (it's very condensed)
+struct BebasTracking: ViewModifier {
+    var amount: CGFloat = 2
     func body(content: Content) -> some View {
-        content.tracking(1.5)
+        content.tracking(amount)
     }
 }
 
 extension View {
+    func bebasTracking(_ amount: CGFloat = 2) -> some View {
+        modifier(BebasTracking(amount: amount))
+    }
+    // Kept for backwards compat — used on caps labels in mono
     func tightTracking() -> some View {
-        modifier(TightTracking())
+        tracking(1.5)
     }
 }

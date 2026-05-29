@@ -10,8 +10,8 @@ struct WhySlide: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 24) {
-                Text("What are you\nrunning toward?")
-                    .font(GGFonts.display)
+                Text("WHAT ARE YOU\nRUNNING TOWARD?")
+                    .font(GGFonts.title)
                     .foregroundStyle(GGColors.textPrimary)
                     .lineSpacing(4)
 
@@ -31,13 +31,13 @@ struct WhySlide: View {
                         .focused($focused)
                         .frame(minHeight: 120, maxHeight: 200)
                 }
-                .padding(16)
-                .background(GGColors.surfaceElevated)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .padding(14)
+                .background(GGColors.surface)
+                .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
 
                 HStack {
                     Spacer()
-                    Text("\(why.count)/300")
+                    Text("\(why.count) / 300")
                         .font(GGFonts.caption)
                         .foregroundStyle(GGColors.textTertiary)
                 }

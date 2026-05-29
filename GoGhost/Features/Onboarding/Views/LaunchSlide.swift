@@ -6,29 +6,28 @@ struct LaunchSlide: View {
     let onLaunch: () -> Void
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             Spacer()
 
-            VStack(spacing: 32) {
-                VStack(spacing: 8) {
-                    Text("DAY 1 OF 90")
-                        .font(GGFonts.label)
-                        .foregroundStyle(GGColors.textSecondary)
-                        .tightTracking()
+            VStack(alignment: .leading, spacing: 24) {
+                Text("DAY 1 OF 90")
+                    .font(GGFonts.label)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
 
-                    Text(runName)
-                        .font(GGFonts.display)
-                        .foregroundStyle(GGColors.textPrimary)
-                        .multilineTextAlignment(.center)
-                }
+                Text(runName.uppercased())
+                    .font(GGFonts.display)
+                    .foregroundStyle(GGColors.textPrimary)
+
+                Rectangle().fill(GGColors.border).frame(height: 1)
 
                 Text(why)
                     .font(GGFonts.body)
                     .foregroundStyle(GGColors.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(4)
-                    .padding(.horizontal, 40)
+                    .lineLimit(5)
+                    .lineSpacing(4)
             }
+            .padding(.horizontal, 32)
 
             Spacer()
 

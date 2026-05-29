@@ -7,16 +7,24 @@ struct WelcomeSlide: View {
         VStack(spacing: 0) {
             Spacer()
 
-            VStack(spacing: 16) {
-                Text("90 DAYS.")
-                    .font(GGFonts.counter)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("90")
+                    .font(GGFonts.hero)
                     .foregroundStyle(GGColors.textPrimary)
 
-                Text("What happens when you go ghost?")
+                Text("DAYS.")
+                    .font(GGFonts.display)
+                    .foregroundStyle(GGColors.textPrimary)
+
+                Spacer().frame(height: 16)
+
+                Text("What happens when you\ngo ghost?")
                     .font(GGFonts.body)
                     .foregroundStyle(GGColors.textSecondary)
-                    .multilineTextAlignment(.center)
+                    .lineSpacing(4)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 32)
 
             Spacer()
 

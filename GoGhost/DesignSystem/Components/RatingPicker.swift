@@ -5,19 +5,19 @@ struct RatingPicker: View {
     var max: Int = 10
 
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 6) {
+        VStack(spacing: 10) {
+            HStack(spacing: 4) {
                 ForEach(1...max, id: \.self) { i in
                     Button {
                         value = i
                     } label: {
-                        RoundedRectangle(cornerRadius: 4, style: .continuous)
-                            .fill(i <= value ? GGColors.accent : GGColors.surfaceElevated)
+                        Rectangle()
+                            .fill(i <= value ? GGColors.accent : GGColors.surface)
                             .frame(maxWidth: .infinity)
-                            .frame(height: 36)
+                            .frame(height: 32)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 4, style: .continuous)
-                                    .stroke(i <= value ? GGColors.accent : GGColors.border, lineWidth: 0.5)
+                                Rectangle()
+                                    .stroke(i <= value ? GGColors.accent : GGColors.border, lineWidth: 1)
                             )
                     }
                     .buttonStyle(.plain)

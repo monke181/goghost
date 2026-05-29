@@ -28,8 +28,11 @@ targets:
         UILaunchScreen: {}
         NSUserNotificationUsageDescription: "GoGhost sends daily check-in reminders."
         UIAppFonts:
-          - InterVariable.ttf
-          - InterDisplay-Black.ttf
+          - BebasNeue-Regular.ttf
+          - IBMPlexMono-Regular.otf
+          - IBMPlexMono-Medium.otf
+          - IBMPlexMono-SemiBold.otf
+          - IBMPlexMono-Bold.otf
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.goghost.app

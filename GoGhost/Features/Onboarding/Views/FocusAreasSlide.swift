@@ -12,19 +12,19 @@ struct FocusAreasSlide: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Pick your lanes.")
-                        .font(GGFonts.display)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("PICK YOUR LANES.")
+                        .font(GGFonts.title)
                         .foregroundStyle(GGColors.textPrimary)
 
                     Text("Up to 3. These are your focus areas.")
-                        .font(GGFonts.body)
+                        .font(GGFonts.caption)
                         .foregroundStyle(GGColors.textSecondary)
                 }
 
-                LazyVGrid(columns: columns, spacing: 10) {
+                LazyVGrid(columns: columns, spacing: 8) {
                     ForEach(FocusArea.allCases) { area in
-                        AreaCard(
+                        AreaRow(
                             area: area,
                             isSelected: selectedAreas.contains(area.rawValue),
                             isDisabled: !selectedAreas.contains(area.rawValue) && selectedAreas.count >= 3
@@ -39,7 +39,7 @@ struct FocusAreasSlide: View {
             Spacer()
 
             GGPrimaryButton(title: "CONTINUE", action: onContinue)
-                .padding(.horizontal, 32)
+                .padding(.horizontal, 24)
                 .padding(.bottom, 56)
                 .opacity(selectedAreas.isEmpty ? 0.3 : 1)
                 .disabled(selectedAreas.isEmpty)
@@ -47,7 +47,7 @@ struct FocusAreasSlide: View {
     }
 }
 
-private struct AreaCard: View {
+private struct AreaRow: View {
     let area: FocusArea
     let isSelected: Bool
     let isDisabled: Bool
@@ -55,32 +55,32 @@ private struct AreaCard: View {
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 8) {
-                Image(systemName: area.icon)
-                    .font(.system(size: 20))
-                    .foregroundStyle(isSelected ? GGColors.accent : GGColors.textSecondary)
+            HStack(spacing: 10) {
+                Rectangle()
+                    .fill(isSelected ? GGColors.accent : GGColors.border)
+                    .frame(width: 3, height: 32)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(area.rawValue.uppercased())
                         .font(GGFonts.label)
                         .foregroundStyle(isSelected ? GGColors.textPrimary : GGColors.textSecondary)
                         .tightTracking()
-
                     Text(area.tagline)
                         .font(GGFonts.caption)
                         .foregroundStyle(GGColors.textTertiary)
                         .lineLimit(1)
                 }
+
+                Spacer()
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(14)
-            .background(isSelected ? GGColors.accentDim : GGColors.surfaceElevated)
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 12)
+            .background(GGColors.surface)
             .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(isSelected ? GGColors.accent : GGColors.border, lineWidth: isSelected ? 1 : 0.5)
+                Rectangle()
+                    .stroke(isSelected ? GGColors.accent : GGColors.border, lineWidth: 1)
             )
-            .opacity(isDisabled ? 0.35 : 1)
+            .opacity(isDisabled ? 0.3 : 1)
         }
         .buttonStyle(.plain)
         .disabled(isDisabled)

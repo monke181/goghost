@@ -5,7 +5,7 @@ struct GGProgressRing: View {
     let dayNumber: Int
     let totalDays: Int
     var size: CGFloat = 220
-    var lineWidth: CGFloat = 6
+    var lineWidth: CGFloat = 3
 
     @State private var animatedProgress: Double = 0
 
@@ -18,23 +18,20 @@ struct GGProgressRing: View {
             // Fill
             Circle()
                 .trim(from: 0, to: animatedProgress)
-                .stroke(
-                    GGColors.accent,
-                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round)
-                )
+                .stroke(GGColors.accent, style: StrokeStyle(lineWidth: lineWidth, lineCap: .square))
                 .rotationEffect(.degrees(-90))
 
-            // Center content
-            VStack(spacing: 2) {
+            // Center
+            VStack(spacing: 0) {
                 Text("\(dayNumber)")
                     .font(GGFonts.counter)
                     .foregroundStyle(GGColors.textPrimary)
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
 
-                Text("OF \(totalDays)")
+                Text("/ \(totalDays)")
                     .font(GGFonts.label)
-                    .foregroundStyle(GGColors.textSecondary)
+                    .foregroundStyle(GGColors.textTertiary)
                     .tightTracking()
             }
         }

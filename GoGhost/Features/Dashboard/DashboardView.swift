@@ -22,18 +22,24 @@ struct DashboardView: View {
 
             if let run {
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(alignment: .leading, spacing: 0) {
+
                         // Header
                         HStack {
                             Text(run.name.uppercased())
                                 .font(GGFonts.label)
-                                .foregroundStyle(GGColors.textSecondary)
+                                .foregroundStyle(GGColors.textTertiary)
                                 .tightTracking()
                                 .lineLimit(1)
                             Spacer()
+                            Text("\(run.daysRemaining) DAYS LEFT")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textTertiary)
+                                .tightTracking()
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 64)
+                        .padding(.bottom, 32)
 
                         // Progress ring
                         GGProgressRing(
@@ -41,66 +47,79 @@ struct DashboardView: View {
                             dayNumber: run.dayNumber,
                             totalDays: run.targetDays
                         )
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 20)
 
                         // Streak
-                        HStack(spacing: 6) {
-                            Image(systemName: "flame.fill")
-                                .font(.system(size: 12))
-                                .foregroundStyle(run.currentStreak > 0 ? GGColors.accent : GGColors.textTertiary)
-                            Text("\(run.currentStreak) DAY STREAK")
+                        HStack {
+                            Spacer()
+                            Text(run.currentStreak > 0 ? "\(run.currentStreak) DAY STREAK" : "NO STREAK")
                                 .font(GGFonts.label)
                                 .foregroundStyle(run.currentStreak > 0 ? GGColors.accent : GGColors.textTertiary)
                                 .tightTracking()
+                            Spacer()
                         }
+                        .padding(.bottom, 32)
 
-                        Spacer().frame(height: 4)
+                        // Divider
+                        Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
 
-                        // Discipline + momentum
+                        // Discipline + momentum row
                         HStack(alignment: .center, spacing: 0) {
-                            VStack(alignment: .leading, spacing: 4) {
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text("DISCIPLINE")
                                     .font(GGFonts.label)
-                                    .foregroundStyle(GGColors.textSecondary)
+                                    .foregroundStyle(GGColors.textTertiary)
                                     .tightTracking()
                                 Text("\(run.averageDisciplineScore)")
                                     .font(GGFonts.counterSmall)
                                     .foregroundStyle(GGColors.textPrimary)
                             }
                             Spacer()
-                            VStack(alignment: .trailing, spacing: 4) {
-                                Text("7 DAYS")
+                            VStack(alignment: .trailing, spacing: 6) {
+                                Text("LAST 7")
                                     .font(GGFonts.label)
-                                    .foregroundStyle(GGColors.textSecondary)
+                                    .foregroundStyle(GGColors.textTertiary)
                                     .tightTracking()
                                 GGMomentumBar(scores: run.last7DayScores)
                             }
                         }
-                        .ggCard()
                         .padding(.horizontal, 24)
+                        .padding(.vertical, 20)
 
-                        // Check-in buttons
-                        HStack(spacing: 12) {
-                            CheckInCard(
-                                title: "MORNING",
+                        Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
+
+                        // Check-ins
+                        HStack(spacing: 0) {
+                            CheckInRow(
+                                label: "MORNING",
+                                status: todayEntryIfExists?.morningCheckInCompleted == true ? "DONE" : "PENDING",
                                 isDone: todayEntryIfExists?.morningCheckInCompleted == true,
                                 action: { showMorning = true }
                             )
-                            CheckInCard(
-                                title: "TONIGHT",
+                            Rectangle().fill(GGColors.border).frame(width: 1)
+                            CheckInRow(
+                                label: "TONIGHT",
+                                status: todayEntryIfExists?.nightCheckInCompleted == true ? "DONE" : "PENDING",
                                 isDone: todayEntryIfExists?.nightCheckInCompleted == true,
                                 action: { showNight = true }
                             )
                         }
+                        .frame(height: 80)
+                        .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1).padding(.horizontal, 24))
                         .padding(.horizontal, 24)
+                        .padding(.vertical, 20)
+
+                        Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
 
                         // Why statement
                         if !run.why.isEmpty {
                             Text(run.why)
                                 .font(GGFonts.caption)
                                 .foregroundStyle(GGColors.textTertiary)
-                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 20)
                                 .lineLimit(3)
-                                .padding(.horizontal, 32)
                         }
 
                         Spacer().frame(height: 100)
@@ -114,10 +133,11 @@ struct DashboardView: View {
                     NightCheckInView(run: run)
                 }
             } else {
-                VStack(spacing: 16) {
-                    Text("No active run.")
-                        .font(GGFonts.headline)
-                        .foregroundStyle(GGColors.textSecondary)
+                VStack {
+                    Text("NO ACTIVE RUN")
+                        .font(GGFonts.label)
+                        .foregroundStyle(GGColors.textTertiary)
+                        .tightTracking()
                 }
             }
         }
@@ -125,29 +145,25 @@ struct DashboardView: View {
     }
 }
 
-private struct CheckInCard: View {
-    let title: String
+private struct CheckInRow: View {
+    let label: String
+    let status: String
     let isDone: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text(title)
-                        .font(GGFonts.label)
-                        .foregroundStyle(GGColors.textSecondary)
-                        .tightTracking()
-                    Spacer()
-                    Circle()
-                        .fill(isDone ? GGColors.accent : GGColors.border)
-                        .frame(width: 7, height: 7)
-                }
-                Text(isDone ? "Done" : "Pending")
-                    .font(GGFonts.bodyMedium)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(label)
+                    .font(GGFonts.label)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
+                Text(status)
+                    .font(GGFonts.bodyMed)
                     .foregroundStyle(isDone ? GGColors.accent : GGColors.textPrimary)
             }
-            .ggCard()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
         }
         .buttonStyle(.plain)
     }

@@ -37,26 +37,25 @@ struct NightCheckInView: View {
         }
     }
 
-    // MARK: Step 0
     private var openerStep: some View {
         slideShell {
-            VStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("DAY \(run.dayNumber)")
-                    .font(GGFonts.counterMedium)
+                    .font(GGFonts.display)
                     .foregroundStyle(GGColors.textPrimary)
-                Text("Done.")
-                    .font(GGFonts.title)
-                    .foregroundStyle(GGColors.textSecondary)
+                Text("DONE.")
+                    .font(GGFonts.headline)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
             }
         } action: {
             GGPrimaryButton(title: "REFLECT", action: vm.advance)
         }
     }
 
-    // MARK: Step 1 — Wins
     private var winsStep: some View {
         slideShell {
-            journalField(prompt: "What did you actually win today?", binding: $vm.wins)
+            journalField(prompt: "WHAT DID YOU\nACTUALLY WIN TODAY?", binding: $vm.wins)
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
                 .opacity(vm.wins.isEmpty ? 0.3 : 1)
@@ -64,35 +63,29 @@ struct NightCheckInView: View {
         }
     }
 
-    // MARK: Step 2 — Losses
     private var lossesStep: some View {
         slideShell {
-            journalField(prompt: "Where did you slip?", binding: $vm.losses)
+            journalField(prompt: "WHERE DID\nYOU SLIP?", binding: $vm.losses)
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
         }
     }
 
-    // MARK: Step 3 — Lessons
     private var lessonsStep: some View {
         slideShell {
-            journalField(prompt: "What's the one lesson from today?", binding: $vm.lessons)
+            journalField(prompt: "WHAT'S THE\nONE LESSON?", binding: $vm.lessons)
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
         }
     }
 
-    // MARK: Step 4 — Dopamine audit
     private var dopamineStep: some View {
         slideShell {
             VStack(alignment: .leading, spacing: 16) {
-                Text("What did you stay away from?")
-                    .font(GGFonts.headline)
+                Text("WHAT DID YOU\nSTAY AWAY FROM?")
+                    .font(GGFonts.title)
                     .foregroundStyle(GGColors.textPrimary)
-
-                Text("Mark what you avoided today.")
-                    .font(GGFonts.caption)
-                    .foregroundStyle(GGColors.textTertiary)
+                    .lineSpacing(2)
 
                 VStack(spacing: 0) {
                     ForEach(CheckInViewModel.dopamineItems, id: \.self) { item in
@@ -102,39 +95,39 @@ struct NightCheckInView: View {
                             else { vm.dopamineAvoided.insert(item) }
                         } label: {
                             HStack {
-                                Text(item)
-                                    .font(GGFonts.body)
+                                Text(item.uppercased())
+                                    .font(GGFonts.bodyMed)
                                     .foregroundStyle(isOn ? GGColors.textPrimary : GGColors.textSecondary)
+                                    .tightTracking()
                                 Spacer()
-                                Image(systemName: isOn ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(isOn ? GGColors.accent : GGColors.textTertiary)
+                                Rectangle()
+                                    .fill(isOn ? GGColors.accent : .clear)
+                                    .frame(width: 8, height: 8)
+                                    .overlay(Rectangle().stroke(isOn ? GGColors.accent : GGColors.border, lineWidth: 1))
                             }
+                            .padding(.horizontal, 16)
                             .padding(.vertical, 14)
                         }
                         .buttonStyle(.plain)
 
                         if item != CheckInViewModel.dopamineItems.last {
-                            Divider().background(GGColors.border)
+                            Rectangle().fill(GGColors.border).frame(height: 1)
                         }
                     }
                 }
-                .padding(.horizontal, 16)
-                .background(GGColors.surfaceElevated)
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
             }
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
         }
     }
 
-    // MARK: Step 5 — Rating
     private var ratingStep: some View {
         slideShell {
             VStack(alignment: .leading, spacing: 20) {
-                Text("Rate the day.")
-                    .font(GGFonts.headline)
+                Text("RATE THE DAY.")
+                    .font(GGFonts.title)
                     .foregroundStyle(GGColors.textPrimary)
-
                 RatingPicker(value: $vm.dayRating, max: 10)
             }
         } action: {
@@ -146,26 +139,28 @@ struct NightCheckInView: View {
         }
     }
 
-    // MARK: Step 6 — Score reveal
     private var scoreRevealStep: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) {
             Spacer()
 
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("DISCIPLINE SCORE")
                     .font(GGFonts.label)
-                    .foregroundStyle(GGColors.textSecondary)
+                    .foregroundStyle(GGColors.textTertiary)
                     .tightTracking()
 
                 Text("\(vm.computedScore)")
-                    .font(GGFonts.counter)
+                    .font(GGFonts.hero)
                     .foregroundStyle(scoreColor(vm.computedScore))
                     .contentTransition(.numericText())
+
+                Rectangle().fill(GGColors.border).frame(height: 1)
 
                 Text(scoreTagline(vm.computedScore))
                     .font(GGFonts.body)
                     .foregroundStyle(GGColors.textSecondary)
             }
+            .padding(.horizontal, 32)
 
             Spacer()
 
@@ -178,12 +173,13 @@ struct NightCheckInView: View {
     private func journalField(prompt: String, binding: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(prompt)
-                .font(GGFonts.headline)
+                .font(GGFonts.title)
                 .foregroundStyle(GGColors.textPrimary)
+                .lineSpacing(2)
 
             ZStack(alignment: .topLeading) {
                 if binding.wrappedValue.isEmpty {
-                    Text("Write it.")
+                    Text("—")
                         .font(GGFonts.body)
                         .foregroundStyle(GGColors.textTertiary)
                         .padding(.top, 8)
@@ -196,15 +192,15 @@ struct NightCheckInView: View {
                     .background(.clear)
                     .frame(minHeight: 120)
             }
-            .padding(16)
-            .background(GGColors.surfaceElevated)
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .padding(14)
+            .background(GGColors.surface)
+            .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
         }
     }
 
-    private func slideShell<Content: View, Action: View>(
-        @ViewBuilder content: () -> Content,
-        @ViewBuilder action: () -> Action
+    private func slideShell<C: View, A: View>(
+        @ViewBuilder content: () -> C,
+        @ViewBuilder action: () -> A
     ) -> some View {
         VStack(spacing: 0) {
             Spacer()
@@ -218,16 +214,16 @@ struct NightCheckInView: View {
         }
     }
 
-    private func scoreColor(_ score: Int) -> Color {
-        if score >= 80 { return GGColors.accent }
-        if score >= 50 { return GGColors.textPrimary }
+    private func scoreColor(_ s: Int) -> Color {
+        if s >= 80 { return GGColors.accent }
+        if s >= 50 { return GGColors.textPrimary }
         return GGColors.danger
     }
 
-    private func scoreTagline(_ score: Int) -> String {
-        if score >= 80 { return "Locked in." }
-        if score >= 60 { return "Solid day." }
-        if score >= 40 { return "You can do better." }
+    private func scoreTagline(_ s: Int) -> String {
+        if s >= 80 { return "Locked in." }
+        if s >= 60 { return "Solid day." }
+        if s >= 40 { return "You can do better." }
         return "Tomorrow is the one."
     }
 }
