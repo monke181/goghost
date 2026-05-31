@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct DashboardView: View {
     @Environment(\.modelContext) private var context
@@ -106,7 +107,7 @@ struct DashboardView: View {
                             )
                         }
                         .frame(height: 80)
-                        .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1).padding(.horizontal, 24))
+                        .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
                         .padding(.horizontal, 24)
                         .padding(.vertical, 20)
 
@@ -142,6 +143,9 @@ struct DashboardView: View {
             }
         }
         .navigationBarHidden(true)
+        .onAppear {
+            NotificationManager.shared.requestPermission()
+        }
     }
 }
 

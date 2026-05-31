@@ -21,7 +21,7 @@ struct NightCheckInView: View {
                     .id(vm.step)
             }
         }
-        .interactiveDismissDisabled(!vm.isComplete)
+        .interactiveDismissDisabled(true)
     }
 
     @ViewBuilder
@@ -203,6 +203,18 @@ struct NightCheckInView: View {
         @ViewBuilder action: () -> A
     ) -> some View {
         VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(GGColors.textTertiary)
+                        .padding(12)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+
             Spacer()
             content()
                 .frame(maxWidth: .infinity, alignment: .leading)
