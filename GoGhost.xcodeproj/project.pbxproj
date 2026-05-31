@@ -50,6 +50,7 @@
 		DC7B8EDE2FCBE3A800974190 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7B8EDD2FCBE3A800974190 /* SettingsViewModel.swift */; };
 		DC7B8EE12FCBE5B800974190 /* GoalsSlide 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7B8EDF2FCBE5B800974190 /* GoalsSlide 2.swift */; };
 		DC7B8EE22FCBE5B800974190 /* ScreenTimeSlide 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7B8EE02FCBE5B800974190 /* ScreenTimeSlide 2.swift */; };
+		DC7B8EE42FCBE69700974190 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7B8EE32FCBE69700974190 /* ScreenTimeManager.swift */; };
 		ED8931084B617247FCC9A070 /* SystemSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1457C898080F9FA998276 /* SystemSlide.swift */; };
 		F8E53AF252974586499598CC /* FocusAreasSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */; };
 		FEC8629BB1E28D12D15D0ADB /* GGBottomNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09003748A3A7E2E71637AC46 /* GGBottomNav.swift */; };
@@ -112,6 +113,7 @@
 		DC7B8EDD2FCBE3A800974190 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		DC7B8EDF2FCBE5B800974190 /* GoalsSlide 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GoalsSlide 2.swift"; sourceTree = "<group>"; };
 		DC7B8EE02FCBE5B800974190 /* ScreenTimeSlide 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenTimeSlide 2.swift"; sourceTree = "<group>"; };
+		DC7B8EE32FCBE69700974190 /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
 		E1F2A3B4C5D6E7F8A9B0C1D2 /* NotificationsSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSlide.swift; sourceTree = "<group>"; };
 		E20E4AFFB1962EDDF2B8A8E7 /* GGTimerDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGTimerDisplay.swift; sourceTree = "<group>"; };
 		F3D63CCF2067B7C01297AD8C /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 		4836233D4481093BC53E114B /* App */ = {
 			isa = PBXGroup;
 			children = (
+				DC7B8EE32FCBE69700974190 /* ScreenTimeManager.swift */,
 				F3D63CCF2067B7C01297AD8C /* AppState.swift */,
 				C9980EBD84AFE3D345059144 /* GoGhostApp.swift */,
 				B1C2D3E4F5A6B7C8D9E0F1A2 /* NotificationManager.swift */,
@@ -442,6 +445,7 @@
 				59519BC4E1330646C3D72624 /* RootRouter.swift in Sources */,
 				57D345011DB4E1D5CAB26682 /* Run.swift in Sources */,
 				269EEC68BD1F389EAEE88D6C /* SettingsView.swift in Sources */,
+				DC7B8EE42FCBE69700974190 /* ScreenTimeManager.swift in Sources */,
 				ED8931084B617247FCC9A070 /* SystemSlide.swift in Sources */,
 				37D42E06B12E7462E61F3C21 /* WelcomeSlide.swift in Sources */,
 				31D8DB773BF208071B80E36D /* WhySlide.swift in Sources */,

@@ -30,6 +30,7 @@ final class GhostModeViewModel {
     func start() {
         sessionStart = .now
         state = .running
+        ScreenTimeManager.shared.activateShield()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.tick()
         }
@@ -61,6 +62,7 @@ final class GhostModeViewModel {
         remainingSeconds = selectedMinutes * 60
         justCompleted = false
         sessionStart = nil
+        ScreenTimeManager.shared.deactivateShield()
     }
 
     func handleBackground() {
@@ -72,7 +74,11 @@ final class GhostModeViewModel {
     }
 
     func handleForeground() {
-        guard state == .running else { return }
+        guard state == .running else {
+            // Clear any orphaned shield if we come back to an idle state (e.g. after a crash)
+            if state == .idle { ScreenTimeManager.shared.deactivateShield() }
+            return
+        }
         let bgTime = UserDefaults.standard.double(forKey: AppStorageKeys.ghostModeBackgroundedAt)
         let savedRemaining = UserDefaults.standard.integer(forKey: AppStorageKeys.ghostModeRemainingSeconds)
         guard bgTime > 0, savedRemaining > 0 else { return }
@@ -100,6 +106,7 @@ final class GhostModeViewModel {
         timer = nil
         state = .complete
         justCompleted = true
+        ScreenTimeManager.shared.deactivateShield()
         if let context {
             persist(actualSeconds: selectedMinutes * 60, completed: true, run: run, context: context)
         }

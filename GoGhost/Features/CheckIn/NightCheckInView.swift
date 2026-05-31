@@ -233,7 +233,7 @@ struct NightCheckInView: View {
             }
         } action: {
             GGPrimaryButton(title: "SUBMIT") {
-                let entry = todayEntry(for: run, context: context)
+                let entry = GoGhost.todayEntry(for: run, context: context)
                 vm.save(to: entry, context: context)
                 vm.advance()
             }
