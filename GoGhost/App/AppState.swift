@@ -10,4 +10,10 @@ enum AppStorageKeys {
     static let nightReminderMinute = "nightReminderMinute"
     static let ghostModeBackgroundedAt = "ghostModeBackgroundedAt"
     static let ghostModeRemainingSeconds = "ghostModeRemainingSeconds"
+    static let defaultGhostDuration = "defaultGhostDuration"
+    static let familyActivitySelection = "familyActivitySelection"
+    static let hapticsEnabled = "hapticsEnabled"
+    // sentinel keys — checked with object(forKey:) to distinguish "not set" from 0
+    static let morningReminderHourSet = "morningReminderHourSet"
+    static let nightReminderHourSet = "nightReminderHourSet"
 }

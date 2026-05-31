@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct GoGhostApp: App {
+struct NinetyDayRunApp: App {
     @Environment(\.scenePhase) private var scenePhase
     let container: ModelContainer
 

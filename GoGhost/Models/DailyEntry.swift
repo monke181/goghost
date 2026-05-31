@@ -19,8 +19,17 @@ final class DailyEntry {
     var nightCheckInCompleted: Bool
     var nightWins: String
     var nightLosses: String
+    var nightDistractedBy: String
     var nightLessons: String
+    var nightTomorrowMustDo: String
+    var nightJournal: String
+    var nightImprovedOn: String
     var nightScoreRating: Int           // 1–10
+
+    // Morning goal completion (tracked during night check-in)
+    var morningGoal1Done: Bool
+    var morningGoal2Done: Bool
+    var morningGoal3Done: Bool
 
     // Ghost mode log for the day
     var totalFocusMinutes: Int
@@ -53,8 +62,15 @@ final class DailyEntry {
         self.nightCheckInCompleted = false
         self.nightWins = ""
         self.nightLosses = ""
+        self.nightDistractedBy = ""
         self.nightLessons = ""
+        self.nightTomorrowMustDo = ""
+        self.nightJournal = ""
+        self.nightImprovedOn = ""
         self.nightScoreRating = 0
+        self.morningGoal1Done = false
+        self.morningGoal2Done = false
+        self.morningGoal3Done = false
         self.totalFocusMinutes = 0
         self.dopamineAvoided = []
     }

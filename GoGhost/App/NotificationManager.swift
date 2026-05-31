@@ -23,35 +23,51 @@ final class NotificationManager {
 
     func scheduleCheckInNotifications() {
         let center = UNUserNotificationCenter.current()
+        let ud = UserDefaults.standard
         center.removePendingNotificationRequests(withIdentifiers: [morningID, nightID])
 
-        let morning = UNMutableNotificationContent()
-        morning.title = "Morning Check-In"
-        morning.body = "Set your intentions. Lock in for the day."
-        morning.sound = .default
+        let morningEnabled = ud.bool(forKey: AppStorageKeys.morningReminderEnabled)
+        let nightEnabled = ud.bool(forKey: AppStorageKeys.nightReminderEnabled)
 
-        var morningTime = DateComponents()
-        morningTime.hour = 7
-        morningTime.minute = 30
-        center.add(UNNotificationRequest(
-            identifier: morningID,
-            content: morning,
-            trigger: UNCalendarNotificationTrigger(dateMatching: morningTime, repeats: true)
-        ))
+        if morningEnabled {
+            let mh = ud.object(forKey: AppStorageKeys.morningReminderHourSet) != nil
+                ? ud.integer(forKey: AppStorageKeys.morningReminderHour) : 7
+            let mm = ud.integer(forKey: AppStorageKeys.morningReminderMinute)
 
-        let night = UNMutableNotificationContent()
-        night.title = "Night Reflection"
-        night.body = "How did the day go? Time to reflect."
-        night.sound = .default
+            let morning = UNMutableNotificationContent()
+            morning.title = "Morning Check-In"
+            morning.body = "Set your intentions. Lock in for the day."
+            morning.sound = .default
 
-        var nightTime = DateComponents()
-        nightTime.hour = 21
-        nightTime.minute = 0
-        center.add(UNNotificationRequest(
-            identifier: nightID,
-            content: night,
-            trigger: UNCalendarNotificationTrigger(dateMatching: nightTime, repeats: true)
-        ))
+            var morningTime = DateComponents()
+            morningTime.hour = mh
+            morningTime.minute = mm
+            center.add(UNNotificationRequest(
+                identifier: morningID,
+                content: morning,
+                trigger: UNCalendarNotificationTrigger(dateMatching: morningTime, repeats: true)
+            ))
+        }
+
+        if nightEnabled {
+            let nh = ud.object(forKey: AppStorageKeys.nightReminderHourSet) != nil
+                ? ud.integer(forKey: AppStorageKeys.nightReminderHour) : 21
+            let nm = ud.integer(forKey: AppStorageKeys.nightReminderMinute)
+
+            let night = UNMutableNotificationContent()
+            night.title = "Night Reflection"
+            night.body = "How did the day go? Time to reflect."
+            night.sound = .default
+
+            var nightTime = DateComponents()
+            nightTime.hour = nh
+            nightTime.minute = nm
+            center.add(UNNotificationRequest(
+                identifier: nightID,
+                content: night,
+                trigger: UNCalendarNotificationTrigger(dateMatching: nightTime, repeats: true)
+            ))
+        }
     }
 
     func cancelCheckInNotifications() {

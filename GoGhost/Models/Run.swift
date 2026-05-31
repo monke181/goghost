@@ -7,6 +7,8 @@ final class Run {
     var name: String
     var why: String
     var focusAreas: [String]
+    var goals: [String]
+    var completedGoals: [String]
     var startDate: Date
     var targetDays: Int
     var isActive: Bool
@@ -68,11 +70,13 @@ final class Run {
         return scored.reduce(0) { $0 + $1.disciplineScore } / scored.count
     }
 
-    init(name: String, why: String, focusAreas: [String], startDate: Date = .now) {
+    init(name: String, why: String, focusAreas: [String], goals: [String] = [], startDate: Date = .now) {
         self.id = UUID()
         self.name = name
         self.why = why
         self.focusAreas = focusAreas
+        self.goals = goals
+        self.completedGoals = []
         self.startDate = startDate
         self.targetDays = 90
         self.isActive = true

@@ -7,6 +7,11 @@ struct NightCheckInView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var vm = CheckInViewModel(mode: .night)
 
+    private var todayEntry: DailyEntry? {
+        let today = Calendar.current.startOfDay(for: .now)
+        return run.entries.first(where: { Calendar.current.startOfDay(for: $0.date) == today })
+    }
+
     var body: some View {
         ZStack {
             GGColors.background.ignoresSafeArea()
@@ -27,15 +32,22 @@ struct NightCheckInView: View {
     @ViewBuilder
     private var stepContent: some View {
         switch vm.step {
-        case 0: openerStep
-        case 1: winsStep
-        case 2: lossesStep
-        case 3: lessonsStep
-        case 4: dopamineStep
-        case 5: ratingStep
+        case 0:  openerStep
+        case 1:  checklistStep
+        case 2:  winsStep
+        case 3:  lossesStep
+        case 4:  distractionsStep
+        case 5:  lessonsStep
+        case 6:  tomorrowStep
+        case 7:  journalStep
+        case 8:  improvedOnStep
+        case 9:  dopamineStep
+        case 10: ratingStep
         default: scoreRevealStep
         }
     }
+
+    // MARK: - Steps
 
     private var openerStep: some View {
         slideShell {
@@ -53,9 +65,66 @@ struct NightCheckInView: View {
         }
     }
 
+    private var checklistStep: some View {
+        let entry = todayEntry
+        let goals = [entry?.morningGoal1, entry?.morningGoal2, entry?.morningGoal3]
+            .compactMap { $0 }.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+
+        return slideShell {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("TODAY'S\nCHECKLIST")
+                    .font(GGFonts.title)
+                    .foregroundStyle(GGColors.textPrimary)
+                    .lineSpacing(2)
+
+                if goals.isEmpty {
+                    Text("No morning goals set.")
+                        .font(GGFonts.body)
+                        .foregroundStyle(GGColors.textTertiary)
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(goals.indices, id: \.self) { i in
+                            let isDone = i == 0 ? vm.goal1Done : i == 1 ? vm.goal2Done : vm.goal3Done
+                            Button {
+                                switch i {
+                                case 0: vm.goal1Done.toggle()
+                                case 1: vm.goal2Done.toggle()
+                                default: vm.goal3Done.toggle()
+                                }
+                            } label: {
+                                HStack {
+                                    Text(goals[i].uppercased())
+                                        .font(GGFonts.bodyMed)
+                                        .foregroundStyle(isDone ? GGColors.textTertiary : GGColors.textPrimary)
+                                        .strikethrough(isDone, color: GGColors.textTertiary)
+                                        .tightTracking()
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Rectangle()
+                                        .fill(isDone ? GGColors.accent : .clear)
+                                        .frame(width: 8, height: 8)
+                                        .overlay(Rectangle().stroke(isDone ? GGColors.accent : GGColors.border, lineWidth: 1))
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 14)
+                            }
+                            .buttonStyle(.plain)
+
+                            if i < goals.count - 1 {
+                                Rectangle().fill(GGColors.border).frame(height: 1)
+                            }
+                        }
+                    }
+                    .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
+                }
+            }
+        } action: {
+            GGPrimaryButton(title: "NEXT", action: vm.advance)
+        }
+    }
+
     private var winsStep: some View {
         slideShell {
-            journalField(prompt: "WHAT DID YOU\nACTUALLY WIN TODAY?", binding: $vm.wins)
+            journalField(prompt: "WHAT DID YOU\nDO TODAY?", binding: $vm.wins)
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
                 .opacity(vm.wins.isEmpty ? 0.3 : 1)
@@ -65,7 +134,15 @@ struct NightCheckInView: View {
 
     private var lossesStep: some View {
         slideShell {
-            journalField(prompt: "WHERE DID\nYOU SLIP?", binding: $vm.losses)
+            journalField(prompt: "WHAT DIDN'T\nYOU DO?", binding: $vm.losses)
+        } action: {
+            GGPrimaryButton(title: "NEXT", action: vm.advance)
+        }
+    }
+
+    private var distractionsStep: some View {
+        slideShell {
+            journalField(prompt: "DISTRACTIONS.", binding: $vm.distractions)
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
         }
@@ -73,7 +150,31 @@ struct NightCheckInView: View {
 
     private var lessonsStep: some View {
         slideShell {
-            journalField(prompt: "WHAT'S THE\nONE LESSON?", binding: $vm.lessons)
+            journalField(prompt: "LESSONS\nLEARNED.", binding: $vm.lessons)
+        } action: {
+            GGPrimaryButton(title: "NEXT", action: vm.advance)
+        }
+    }
+
+    private var tomorrowStep: some View {
+        slideShell {
+            journalField(prompt: "TOMORROW\nMUST DO.", binding: $vm.tomorrowMustDo)
+        } action: {
+            GGPrimaryButton(title: "NEXT", action: vm.advance)
+        }
+    }
+
+    private var journalStep: some View {
+        slideShell {
+            journalField(prompt: "JOURNAL.", binding: $vm.journal)
+        } action: {
+            GGPrimaryButton(title: "NEXT", action: vm.advance)
+        }
+    }
+
+    private var improvedOnStep: some View {
+        slideShell {
+            journalField(prompt: "WHAT I\nIMPROVED ON.", binding: $vm.improvedOn)
         } action: {
             GGPrimaryButton(title: "NEXT", action: vm.advance)
         }
@@ -169,6 +270,8 @@ struct NightCheckInView: View {
                 .padding(.bottom, 56)
         }
     }
+
+    // MARK: - Helpers
 
     private func journalField(prompt: String, binding: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 16) {

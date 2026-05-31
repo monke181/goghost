@@ -65,10 +65,14 @@ struct OnboardingContainerView: View {
                     onToggle: vm.toggleArea,
                     onContinue: vm.advance
                 )
+            case .goals:
+                GoalsSlide(goals: $vm.goals, onContinue: vm.advance)
             case .commit:
                 CommitSlide(onContinue: vm.advance)
             case .notifications:
                 NotificationsSlide(onContinue: vm.advance)
+            case .screenTime:
+                ScreenTimeSlide(onContinue: vm.advance)
             case .launch:
                 LaunchSlide(why: vm.why, focusAreas: Array(vm.selectedAreas)) {
                     vm.commitRun(context: context)

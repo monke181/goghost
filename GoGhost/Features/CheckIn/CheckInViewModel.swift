@@ -19,12 +19,21 @@ final class CheckInViewModel {
     // Night
     var wins = ""
     var losses = ""
+    var distractions = ""
     var lessons = ""
+    var tomorrowMustDo = ""
+    var journal = ""
+    var improvedOn = ""
     var dayRating = 5
     var dopamineAvoided: Set<String> = []
     var computedScore = 0
 
-    var totalSteps: Int { mode == .morning ? 5 : 7 }
+    // Goal checklist (checked off during night reflection)
+    var goal1Done = false
+    var goal2Done = false
+    var goal3Done = false
+
+    var totalSteps: Int { mode == .morning ? 5 : 12 }
     var isLastStep: Bool { step == totalSteps - 1 }
 
     static let dopamineItems = ["Instagram", "TikTok", "Twitter/X", "YouTube", "News", "Alcohol", "Junk food", "Video games"]
@@ -50,9 +59,16 @@ final class CheckInViewModel {
         } else {
             entry.nightWins = wins
             entry.nightLosses = losses
+            entry.nightDistractedBy = distractions
             entry.nightLessons = lessons
+            entry.nightTomorrowMustDo = tomorrowMustDo
+            entry.nightJournal = journal
+            entry.nightImprovedOn = improvedOn
             entry.nightScoreRating = dayRating
             entry.dopamineAvoided = Array(dopamineAvoided)
+            entry.morningGoal1Done = goal1Done
+            entry.morningGoal2Done = goal2Done
+            entry.morningGoal3Done = goal3Done
             entry.nightCheckInCompleted = true
             computedScore = entry.disciplineScore
         }

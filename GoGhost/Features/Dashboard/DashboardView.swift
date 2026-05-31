@@ -112,6 +112,57 @@ struct DashboardView: View {
 
                         Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
 
+                        // Goals checklist
+                        if !run.goals.isEmpty {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("YOUR GOALS")
+                                    .font(GGFonts.label)
+                                    .foregroundStyle(GGColors.textTertiary)
+                                    .tightTracking()
+                                    .padding(.horizontal, 24)
+
+                                VStack(spacing: 0) {
+                                    ForEach(run.goals, id: \.self) { goal in
+                                        let isCompleted = run.completedGoals.contains(goal)
+                                        Button {
+                                            if isCompleted {
+                                                run.completedGoals.removeAll { $0 == goal }
+                                            } else {
+                                                run.completedGoals.append(goal)
+                                            }
+                                        } label: {
+                                            HStack(spacing: 16) {
+                                                Rectangle()
+                                                    .fill(isCompleted ? GGColors.accent : .clear)
+                                                    .frame(width: 8, height: 8)
+                                                    .overlay(Rectangle().stroke(isCompleted ? GGColors.accent : GGColors.border, lineWidth: 1))
+
+                                                Text(goal)
+                                                    .font(GGFonts.bodyMed)
+                                                    .foregroundStyle(isCompleted ? GGColors.textTertiary : GGColors.textPrimary)
+                                                    .strikethrough(isCompleted, color: GGColors.textTertiary)
+                                                    .tightTracking()
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                            }
+                                            .padding(.horizontal, 24)
+                                            .padding(.vertical, 14)
+                                        }
+                                        .buttonStyle(.plain)
+
+                                        if goal != run.goals.last {
+                                            Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
+                                        }
+                                    }
+                                }
+                                .overlay(
+                                    Rectangle().stroke(GGColors.border, lineWidth: 1).padding(.horizontal, 24)
+                                )
+                            }
+                            .padding(.vertical, 20)
+
+                            Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
+                        }
+
                         // Why statement
                         if !run.why.isEmpty {
                             Text(run.why)

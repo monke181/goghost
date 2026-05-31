@@ -40,10 +40,13 @@ targets:
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_FILE: GoGhost/Info.plist
+        CODE_SIGN_ENTITLEMENTS: GoGhost/GoGhost.entitlements
     scheme:
       testTargets:
         - GoGhostTests
-    dependencies: []
+    dependencies:
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettings.framework
 
   GoGhostTests:
     type: bundle.unit-test
