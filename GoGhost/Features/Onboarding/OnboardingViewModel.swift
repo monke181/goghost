@@ -4,7 +4,7 @@ import SwiftData
 @Observable
 final class OnboardingViewModel {
     enum Step: Int, CaseIterable {
-        case welcome, system, why, focus, commit, launch
+        case welcome, system, why, focus, commit, notifications, launch
     }
 
     var step: Step = .welcome

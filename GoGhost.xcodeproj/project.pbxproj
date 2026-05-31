@@ -35,6 +35,7 @@
 		98A1E72B88A921AF20FEBDF9 /* LaunchSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479B68D66F23E33BE004AA66 /* LaunchSlide.swift */; };
 		9DDDBDF2BE359016F5A0B7A6 /* GGTimerDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20E4AFFB1962EDDF2B8A8E7 /* GGTimerDisplay.swift */; };
 		A29A27ECB8502C5917D11B25 /* CommitSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B5781A27EE37A5666A2D51 /* CommitSlide.swift */; };
+		D1E2F3A4B5C6D7E8F9A0B1C2 /* NotificationsSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F2A3B4C5D6E7F8A9B0C1D2 /* NotificationsSlide.swift */; };
 		B5B06A7090F52B3D0DA7DC03 /* FocusSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1FA978E4C0AAEE65D8E425 /* FocusSession.swift */; };
 		B7BDD991DFB4285745883336 /* GGMomentumBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C725ABB7D4C52965C67468 /* GGMomentumBar.swift */; };
 		BCF19BB9FE7E92AB94825F5F /* IBMPlexMono-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C4684F889881BD39152E1826 /* IBMPlexMono-Bold.otf */; };
@@ -68,6 +69,7 @@
 		1925D657CBC92473802A466C /* FocusArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusArea.swift; sourceTree = "<group>"; };
 		1E21FB024A46754423D6F929 /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
 		23B5781A27EE37A5666A2D51 /* CommitSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitSlide.swift; sourceTree = "<group>"; };
+		E1F2A3B4C5D6E7F8A9B0C1D2 /* NotificationsSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSlide.swift; sourceTree = "<group>"; };
 		24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoGhostTests.swift; sourceTree = "<group>"; };
 		25714ADD7B1F1BC2B5FEBBD5 /* WelcomeSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSlide.swift; sourceTree = "<group>"; };
 		2E9016F80822A3F154B86521 /* GGFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGFonts.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				23B5781A27EE37A5666A2D51 /* CommitSlide.swift */,
+				E1F2A3B4C5D6E7F8A9B0C1D2 /* NotificationsSlide.swift */,
 				7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */,
 				479B68D66F23E33BE004AA66 /* LaunchSlide.swift */,
 				44B1457C898080F9FA998276 /* SystemSlide.swift */,
@@ -400,6 +403,7 @@
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* NotificationManager.swift in Sources */,
 				085EE8380549395DE68B33C6 /* CheckInViewModel.swift in Sources */,
 				A29A27ECB8502C5917D11B25 /* CommitSlide.swift in Sources */,
+				D1E2F3A4B5C6D7E8F9A0B1C2 /* NotificationsSlide.swift in Sources */,
 				5F30E942ADB71F42A349F4E5 /* DailyEntry.swift in Sources */,
 				33936491A0C4B38427B50762 /* DashboardView.swift in Sources */,
 				7CB5ECDF77CDC4930F245EFE /* FlowLayout.swift in Sources */,

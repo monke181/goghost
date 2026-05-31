@@ -67,6 +67,8 @@ struct OnboardingContainerView: View {
                 )
             case .commit:
                 CommitSlide(onContinue: vm.advance)
+            case .notifications:
+                NotificationsSlide(onContinue: vm.advance)
             case .launch:
                 LaunchSlide(why: vm.why, focusAreas: Array(vm.selectedAreas)) {
                     vm.commitRun(context: context)

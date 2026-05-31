@@ -1,6 +1,5 @@
 import SwiftUI
 import SwiftData
-import UserNotifications
 
 struct DashboardView: View {
     @Environment(\.modelContext) private var context
@@ -143,9 +142,6 @@ struct DashboardView: View {
             }
         }
         .navigationBarHidden(true)
-        .onAppear {
-            NotificationManager.shared.requestPermission()
-        }
     }
 }
 
