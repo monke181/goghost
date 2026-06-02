@@ -4,6 +4,7 @@ import FamilyControls
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(ScreenTimeManager.self) private var screenTime
     @State private var vm = SettingsViewModel()
     @State private var pickerSelection = FamilyActivitySelection()
@@ -116,11 +117,25 @@ struct SettingsView: View {
         }
         .navigationBarHidden(true)
         .onAppear { screenTime.refreshAuthStatus() }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { screenTime.refreshAuthStatus() }
+        }
         // ── App picker ───────────────────────────────────────────────────
         .sheet(isPresented: $vm.showAppPicker, onDismiss: {
             screenTime.saveSelection(pickerSelection)
         }) {
-            FamilyActivityPicker(selection: $pickerSelection)
+            NavigationStack {
+                FamilyActivityPicker(selection: $pickerSelection)
+                    .navigationTitle("Block During Ghost Mode")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") { vm.showAppPicker = false }
+                                .font(GGFonts.label)
+                                .tightTracking()
+                        }
+                    }
+            }
         }
         // ── Time pickers ─────────────────────────────────────────────────
         .sheet(isPresented: $vm.showMorningPicker) {
@@ -159,54 +174,11 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 0) {
             sectionHeader("BLOCK DURING GHOST MODE")
 
-            switch screenTime.authorizationStatus {
-
-            case .approved:
-                // ── Picker row ────────────────────────────────────────
-                Button {
-                    pickerSelection = screenTime.activitySelection
-                    vm.showAppPicker = true
-                } label: {
-                    HStack(alignment: .center, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("CHOOSE APPS")
-                                .font(GGFonts.label)
-                                .foregroundStyle(GGColors.textPrimary)
-                                .tightTracking()
-                            Text(
-                                screenTime.isSelectionEmpty
-                                    ? "NO APPS SELECTED — TAP TO CHOOSE"
-                                    : screenTime.selectionSummary + " BLOCKED"
-                            )
-                            .font(GGFonts.caption)
-                            .foregroundStyle(
-                                screenTime.isSelectionEmpty ? GGColors.textTertiary : GGColors.accent
-                            )
-                            .tightTracking()
-                        }
-                        Spacer()
-                        Text("›")
-                            .font(GGFonts.headline)
-                            .foregroundStyle(GGColors.textSecondary)
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 16)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-
-                Text("BLOCKED APPS ARE SHIELDED AT THE OS LEVEL DURING EVERY GHOST MODE SESSION.")
-                    .font(GGFonts.caption)
-                    .foregroundStyle(GGColors.textTertiary)
-                    .tightTracking()
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 20)
-
-            case .denied:
-                // ── Denied state ──────────────────────────────────────
+            if screenTime.authorizationStatus == .denied {
+                // ── Denied ────────────────────────────────────────────
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("SCREEN TIME DENIED")
+                        Text("PERMISSION DENIED")
                             .font(GGFonts.label)
                             .foregroundStyle(GGColors.textSecondary)
                             .tightTracking()
@@ -232,30 +204,59 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 20)
-
-            default:
-                // ── Not yet authorized ────────────────────────────────
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Authorize Screen Time so Ghost Mode can actually block your apps — not just remind you.")
-                        .font(GGFonts.caption)
-                        .foregroundStyle(GGColors.textTertiary)
-                        .lineSpacing(2)
-
-                    Button {
-                        Task { await screenTime.requestAuthorization() }
-                    } label: {
-                        Text("ENABLE SCREEN TIME")
-                            .font(GGFonts.label)
-                            .tightTracking()
-                            .foregroundStyle(GGColors.background)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                            .background(GGColors.textPrimary)
+            } else {
+                // ── Authorized or not yet asked — same row either way ─
+                Button {
+                    if screenTime.authorizationStatus == .approved {
+                        pickerSelection = screenTime.activitySelection
+                        vm.showAppPicker = true
+                    } else {
+                        Task {
+                            await screenTime.requestAuthorization()
+                            if screenTime.authorizationStatus == .approved {
+                                pickerSelection = screenTime.activitySelection
+                                vm.showAppPicker = true
+                            }
+                        }
                     }
-                    .buttonStyle(.plain)
+                } label: {
+                    HStack(alignment: .center, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("CHOOSE APPS TO BLOCK")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textPrimary)
+                                .tightTracking()
+                            Text(
+                                screenTime.authorizationStatus != .approved
+                                    ? "REQUIRES SCREEN TIME PERMISSION"
+                                    : screenTime.isSelectionEmpty
+                                        ? "NONE SELECTED"
+                                        : screenTime.selectionSummary + " BLOCKED"
+                            )
+                            .font(GGFonts.caption)
+                            .foregroundStyle(
+                                screenTime.authorizationStatus == .approved && !screenTime.isSelectionEmpty
+                                    ? GGColors.accent : GGColors.textTertiary
+                            )
+                            .tightTracking()
+                        }
+                        Spacer()
+                        Text("›")
+                            .font(GGFonts.headline)
+                            .foregroundStyle(GGColors.textSecondary)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 16)
+                    .contentShape(Rectangle())
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 20)
+                .buttonStyle(.plain)
+
+                Text("SELECTED APPS ARE BLOCKED AT THE OS LEVEL DURING EVERY GHOST MODE SESSION.")
+                    .font(GGFonts.caption)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 20)
             }
         }
     }
