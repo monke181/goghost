@@ -4,10 +4,9 @@ import FamilyControls
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var context
+    @Environment(ScreenTimeManager.self) private var screenTime
     @State private var vm = SettingsViewModel()
-    @State private var screenTime = ScreenTimeManager.shared
-    // Local binding for picker — synced to ScreenTimeManager on dismiss
-    @State private var pickerSelection = ScreenTimeManager.shared.activitySelection
+    @State private var pickerSelection = FamilyActivitySelection()
 
     var body: some View {
         ZStack {
@@ -28,7 +27,6 @@ struct SettingsView: View {
                     // ── Ghost Mode ──────────────────────────────────────
                     sectionHeader("GHOST MODE")
 
-                    // Default duration
                     VStack(alignment: .leading, spacing: 10) {
                         Text("DEFAULT SESSION")
                             .font(GGFonts.label)
@@ -58,8 +56,6 @@ struct SettingsView: View {
                     .padding(.vertical, 20)
 
                     divider()
-
-                    // App blocking
                     appBlockingSection
 
                     // ── Notifications ───────────────────────────────────
@@ -74,10 +70,7 @@ struct SettingsView: View {
                         onTimeTap: { vm.showMorningPicker = true }
                     )
 
-                    Rectangle()
-                        .fill(GGColors.border)
-                        .frame(height: 1)
-                        .padding(.leading, 24)
+                    Rectangle().fill(GGColors.border).frame(height: 1).padding(.leading, 24)
 
                     notificationRow(
                         label: "NIGHT REFLECTION",
@@ -123,14 +116,13 @@ struct SettingsView: View {
         }
         .navigationBarHidden(true)
         .onAppear { screenTime.refreshAuthStatus() }
-        // App picker sheet
+        // ── App picker ───────────────────────────────────────────────────
         .sheet(isPresented: $vm.showAppPicker, onDismiss: {
             screenTime.saveSelection(pickerSelection)
         }) {
             FamilyActivityPicker(selection: $pickerSelection)
-                .background(GGColors.background)
         }
-        // Morning time picker
+        // ── Time pickers ─────────────────────────────────────────────────
         .sheet(isPresented: $vm.showMorningPicker) {
             TimePickerSheet(
                 title: "MORNING CHECK-IN",
@@ -141,7 +133,6 @@ struct SettingsView: View {
             .presentationDetents([.height(320)])
             .presentationDragIndicator(.hidden)
         }
-        // Night time picker
         .sheet(isPresented: $vm.showNightPicker) {
             TimePickerSheet(
                 title: "NIGHT REFLECTION",
@@ -152,7 +143,7 @@ struct SettingsView: View {
             .presentationDetents([.height(320)])
             .presentationDragIndicator(.hidden)
         }
-        // Reset confirmation
+        // ── Reset dialog ─────────────────────────────────────────────────
         .confirmationDialog("RESET ALL DATA", isPresented: $vm.showResetConfirm, titleVisibility: .visible) {
             Button("Reset", role: .destructive) { resetAllData() }
             Button("Cancel", role: .cancel) {}
@@ -166,29 +157,32 @@ struct SettingsView: View {
     @ViewBuilder
     private var appBlockingSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("BLOCK DURING GHOST MODE")
-                .font(GGFonts.label)
-                .foregroundStyle(GGColors.textSecondary)
-                .tightTracking()
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-                .padding(.bottom, 14)
+            sectionHeader("BLOCK DURING GHOST MODE")
 
             switch screenTime.authorizationStatus {
 
             case .approved:
-                // Picker trigger row
-                Button { pickerSelection = screenTime.activitySelection; vm.showAppPicker = true } label: {
-                    HStack {
+                // ── Picker row ────────────────────────────────────────
+                Button {
+                    pickerSelection = screenTime.activitySelection
+                    vm.showAppPicker = true
+                } label: {
+                    HStack(alignment: .center, spacing: 12) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(screenTime.isSelectionEmpty ? "NO APPS SELECTED" : screenTime.selectionSummary)
-                                .font(GGFonts.bodyMed)
-                                .foregroundStyle(screenTime.isSelectionEmpty ? GGColors.textTertiary : GGColors.accent)
+                            Text("CHOOSE APPS")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textPrimary)
                                 .tightTracking()
-                            Text("TAP TO CHOOSE APPS & CATEGORIES")
-                                .font(GGFonts.caption)
-                                .foregroundStyle(GGColors.textTertiary)
-                                .tightTracking()
+                            Text(
+                                screenTime.isSelectionEmpty
+                                    ? "NO APPS SELECTED — TAP TO CHOOSE"
+                                    : screenTime.selectionSummary + " BLOCKED"
+                            )
+                            .font(GGFonts.caption)
+                            .foregroundStyle(
+                                screenTime.isSelectionEmpty ? GGColors.textTertiary : GGColors.accent
+                            )
+                            .tightTracking()
                         }
                         Spacer()
                         Text("›")
@@ -201,7 +195,7 @@ struct SettingsView: View {
                 }
                 .buttonStyle(.plain)
 
-                Text("SELECTED APPS ARE SHIELDED AT THE OS LEVEL DURING EVERY GHOST MODE SESSION.")
+                Text("BLOCKED APPS ARE SHIELDED AT THE OS LEVEL DURING EVERY GHOST MODE SESSION.")
                     .font(GGFonts.caption)
                     .foregroundStyle(GGColors.textTertiary)
                     .tightTracking()
@@ -209,13 +203,14 @@ struct SettingsView: View {
                     .padding(.bottom, 20)
 
             case .denied:
+                // ── Denied state ──────────────────────────────────────
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("SCREEN TIME DENIED")
                             .font(GGFonts.label)
                             .foregroundStyle(GGColors.textSecondary)
                             .tightTracking()
-                        Text("Enable in Settings › Screen Time.")
+                        Text("Re-enable in iOS Settings › Screen Time.")
                             .font(GGFonts.caption)
                             .foregroundStyle(GGColors.textTertiary)
                     }
@@ -238,27 +233,23 @@ struct SettingsView: View {
                 .padding(.horizontal, 24)
                 .padding(.bottom, 20)
 
-            default: // .notDetermined
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("NOT ENABLED")
-                            .font(GGFonts.label)
-                            .foregroundStyle(GGColors.textSecondary)
-                            .tightTracking()
-                        Text("Authorize Screen Time to block apps.")
-                            .font(GGFonts.caption)
-                            .foregroundStyle(GGColors.textTertiary)
-                    }
-                    Spacer()
+            default:
+                // ── Not yet authorized ────────────────────────────────
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Authorize Screen Time so Ghost Mode can actually block your apps — not just remind you.")
+                        .font(GGFonts.caption)
+                        .foregroundStyle(GGColors.textTertiary)
+                        .lineSpacing(2)
+
                     Button {
                         Task { await screenTime.requestAuthorization() }
                     } label: {
-                        Text("ENABLE")
+                        Text("ENABLE SCREEN TIME")
                             .font(GGFonts.label)
                             .tightTracking()
                             .foregroundStyle(GGColors.background)
-                            .padding(.vertical, 6)
-                            .padding(.horizontal, 12)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
                             .background(GGColors.textPrimary)
                     }
                     .buttonStyle(.plain)
@@ -269,7 +260,7 @@ struct SettingsView: View {
         }
     }
 
-    // ── Section helpers ──────────────────────────────────────────────────
+    // ── Reusable rows ────────────────────────────────────────────────────
 
     @ViewBuilder
     private func sectionHeader(_ text: String) -> some View {
@@ -284,10 +275,7 @@ struct SettingsView: View {
 
     @ViewBuilder
     private func divider() -> some View {
-        Rectangle()
-            .fill(GGColors.border)
-            .frame(height: 1)
-            .padding(.horizontal, 24)
+        Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
     }
 
     @ViewBuilder
@@ -376,7 +364,7 @@ struct SettingsView: View {
         .padding(.vertical, 16)
     }
 
-    // ── Data ─────────────────────────────────────────────────────────────
+    // ── Data reset ───────────────────────────────────────────────────────
 
     private func resetAllData() {
         do {

@@ -114,6 +114,7 @@
 		DC7B8EDF2FCBE5B800974190 /* GoalsSlide 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GoalsSlide 2.swift"; sourceTree = "<group>"; };
 		DC7B8EE02FCBE5B800974190 /* ScreenTimeSlide 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenTimeSlide 2.swift"; sourceTree = "<group>"; };
 		DC7B8EE32FCBE69700974190 /* ScreenTimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeManager.swift; sourceTree = "<group>"; };
+		DCD996202FCE668B00032819 /* GoGhost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoGhost.entitlements; sourceTree = "<group>"; };
 		E1F2A3B4C5D6E7F8A9B0C1D2 /* NotificationsSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSlide.swift; sourceTree = "<group>"; };
 		E20E4AFFB1962EDDF2B8A8E7 /* GGTimerDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGTimerDisplay.swift; sourceTree = "<group>"; };
 		F3D63CCF2067B7C01297AD8C /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -271,6 +272,7 @@
 		E58D55CA112E9D37FA3C5C72 /* GoGhost */ = {
 			isa = PBXGroup;
 			children = (
+				DCD996202FCE668B00032819 /* GoGhost.entitlements */,
 				B89161AE81D8DE0056B8C60E /* Info.plist */,
 				4836233D4481093BC53E114B /* App */,
 				DB6937F8975FA1921D9CA56B /* DesignSystem */,
@@ -468,6 +470,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = GoGhost/GoGhost.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = R6PW26GDMS;
 				INFOPLIST_FILE = GoGhost/Info.plist;
@@ -502,6 +505,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = GoGhost/GoGhost.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = R6PW26GDMS;
 				INFOPLIST_FILE = GoGhost/Info.plist;

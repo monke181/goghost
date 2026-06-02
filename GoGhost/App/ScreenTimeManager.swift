@@ -1,7 +1,9 @@
 import FamilyControls
 import ManagedSettings
+import Combine
 import Foundation
 
+@MainActor
 @Observable
 final class ScreenTimeManager {
     static let shared = ScreenTimeManager()
@@ -10,10 +12,20 @@ final class ScreenTimeManager {
     var activitySelection: FamilyActivitySelection = FamilyActivitySelection()
 
     private let store = ManagedSettingsStore()
+    // @ObservationIgnored so the macro doesn't wrap AnyCancellable in observation tracking
+    @ObservationIgnored private var cancellable: AnyCancellable?
 
     private init() {
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         activitySelection = Self.loadSelection()
+
+        // Observe the system publisher — status updates arrive async after the
+        // permission dialog is dismissed, so a one-shot sync read misses the change.
+        cancellable = AuthorizationCenter.shared.$authorizationStatus
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] status in
+                self?.authorizationStatus = status
+            }
     }
 
     // ── Authorization ────────────────────────────────────────────────────
@@ -22,11 +34,9 @@ final class ScreenTimeManager {
         do {
             try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
         } catch {
-            // User declined or error — status reflects truth below
+            print("[ScreenTime] authorization failed: \(error)")
         }
-        await MainActor.run {
-            authorizationStatus = AuthorizationCenter.shared.authorizationStatus
-        }
+        // Status update comes through the Combine publisher above — no sync read needed
     }
 
     func refreshAuthStatus() {

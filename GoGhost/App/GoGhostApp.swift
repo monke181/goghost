@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import FamilyControls
 
 @main
 struct NinetyDayRunApp: App {
@@ -19,6 +20,7 @@ struct NinetyDayRunApp: App {
             RootRouter()
                 .modelContainer(container)
                 .preferredColorScheme(.dark)
+                .environment(ScreenTimeManager.shared)
         }
     }
 }
