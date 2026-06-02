@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
     @Environment(ScreenTimeManager.self) private var screenTime
+    @Environment(SubscriptionManager.self) private var subscriptions
     @State private var vm = SettingsViewModel()
     @State private var pickerSelection = FamilyActivitySelection()
 
@@ -24,6 +25,11 @@ struct SettingsView: View {
                         .padding(.horizontal, 24)
                         .padding(.top, 64)
                         .padding(.bottom, 32)
+
+                    // ── Subscription ────────────────────────────────────
+                    sectionHeader("SUBSCRIPTION")
+                    subscriptionSection
+                    divider()
 
                     // ── Ghost Mode ──────────────────────────────────────
                     sectionHeader("GHOST MODE")
@@ -165,6 +171,58 @@ struct SettingsView: View {
         } message: {
             Text("This will permanently delete all runs, sessions, and check-ins. This cannot be undone.")
         }
+    }
+
+    // ── Subscription Section ─────────────────────────────────────────────
+
+    @ViewBuilder
+    private var subscriptionSection: some View {
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(subscriptions.isSubscribed ? "GOGHOST PRO" : "FREE")
+                    .font(GGFonts.label)
+                    .foregroundStyle(GGColors.textPrimary)
+                    .tightTracking()
+                Text(subscriptions.isSubscribed ? "ACTIVE" : "NOT SUBSCRIBED")
+                    .font(GGFonts.caption)
+                    .foregroundStyle(subscriptions.isSubscribed ? GGColors.accent : GGColors.textTertiary)
+                    .tightTracking()
+            }
+
+            Spacer()
+
+            if subscriptions.isSubscribed {
+                // Deep-link to the system subscription management screen.
+                Button {
+                    if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    subscriptionPill("MANAGE")
+                }
+                .buttonStyle(.plain)
+            } else {
+                Button {
+                    Task { await subscriptions.restore() }
+                } label: {
+                    subscriptionPill("RESTORE")
+                }
+                .buttonStyle(.plain)
+                .disabled(subscriptions.isLoading)
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 16)
+    }
+
+    private func subscriptionPill(_ text: String) -> some View {
+        Text(text)
+            .font(GGFonts.label)
+            .tightTracking()
+            .foregroundStyle(GGColors.textSecondary)
+            .padding(.vertical, 6)
+            .padding(.horizontal, 12)
+            .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
     }
 
     // ── App Blocking Section ─────────────────────────────────────────────

@@ -13,6 +13,7 @@ struct NinetyDayRunApp: App {
         } catch {
             fatalError("SwiftData container failed: \(error)")
         }
+        SubscriptionManager.shared.configure()
     }
 
     var body: some Scene {
@@ -21,6 +22,7 @@ struct NinetyDayRunApp: App {
                 .modelContainer(container)
                 .preferredColorScheme(.dark)
                 .environment(ScreenTimeManager.shared)
+                .environment(SubscriptionManager.shared)
         }
     }
 }

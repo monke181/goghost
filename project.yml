@@ -12,6 +12,11 @@ settings:
     ENABLE_PREVIEWS: YES
     DEVELOPMENT_TEAM: R6PW26GDMS
 
+packages:
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios
+    from: "5.14.0"
+
 targets:
   GoGhost:
     type: application
@@ -48,6 +53,7 @@ targets:
     dependencies:
       - sdk: FamilyControls.framework
       - sdk: ManagedSettings.framework
+      - package: RevenueCat
 
   GoGhostTests:
     type: bundle.unit-test
