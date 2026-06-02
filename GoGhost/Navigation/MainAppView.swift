@@ -3,6 +3,7 @@ import SwiftUI
 enum AppTab {
     case dashboard
     case ghostMode
+    case log
     case settings
 }
 
@@ -18,6 +19,8 @@ struct MainAppView: View {
                     NavigationStack { DashboardView() }
                 case .ghostMode:
                     NavigationStack { GhostModeView() }
+                case .log:
+                    NavigationStack { LogView() }
                 case .settings:
                     NavigationStack { SettingsView() }
                 }

@@ -9,7 +9,7 @@ struct NinetyDayRunApp: App {
 
     init() {
         do {
-            container = try ModelContainer(for: Run.self, DailyEntry.self, FocusSession.self)
+            container = try ModelContainer(for: Run.self, DailyEntry.self, FocusSession.self, JournalEntry.self)
         } catch {
             fatalError("SwiftData container failed: \(error)")
         }

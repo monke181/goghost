@@ -6,6 +6,7 @@ struct GGBottomNav: View {
     private let tabs: [(tab: AppTab, label: String)] = [
         (.dashboard, "HOME"),
         (.ghostMode, "GHOST"),
+        (.log,       "LOG"),
         (.settings,  "CONFIG")
     ]
 
