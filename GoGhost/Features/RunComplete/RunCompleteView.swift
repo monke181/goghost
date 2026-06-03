@@ -9,8 +9,11 @@ struct RunCompleteView: View {
     @State private var page = 0
     @State private var shareImage: UIImage?
     @State private var showShare = false
+    @State private var confettiID = UUID()   // changing this re-spawns confetti
 
     private let totalCards = 6
+    // Confetti fires on intro (0) and final summary (5) cards
+    private let celebrationCards: Set<Int> = [0, 5]
 
     var body: some View {
         ZStack {
@@ -25,6 +28,13 @@ struct RunCompleteView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
 
+            // Confetti overlay — only on celebration cards
+            if celebrationCards.contains(page) {
+                GGConfettiView()
+                    .id(confettiID)
+                    .transition(.opacity)
+            }
+
             // Dot indicators
             VStack {
                 Spacer()
@@ -36,6 +46,11 @@ struct RunCompleteView: View {
                     }
                 }
                 .padding(.bottom, 28)
+            }
+        }
+        .onChange(of: page) { _, newPage in
+            if celebrationCards.contains(newPage) {
+                confettiID = UUID()   // fresh confetti each time they land on a celebration card
             }
         }
         .sheet(isPresented: $showShare) {

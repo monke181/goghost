@@ -23,15 +23,8 @@ struct ProgressSectionView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         if let run { statsHeader(run: run) }
-
                         Rectangle().fill(GGColors.border).frame(height: 1)
-                            .padding(.horizontal, 24)
-
-                        scoreChart
-                            .padding(.horizontal, 24)
-                            .padding(.top, 24)
-                            .padding(.bottom, 32)
-
+                        scoreChart.padding(.horizontal, 24).padding(.vertical, 24)
                         Spacer().frame(height: 120)
                     }
                     .padding(.top, 4)
@@ -45,29 +38,34 @@ struct ProgressSectionView: View {
 
     private func statsHeader(run: Run) -> some View {
         VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                statCell(label: "AVG SCORE", value: "\(run.averageDisciplineScore)")
-                Rectangle().fill(GGColors.border).frame(width: 1)
-                statCell(label: "BEST SCORE", value: "\(run.allTimeBestScore)")
-                Rectangle().fill(GGColors.border).frame(width: 1)
-                statCell(label: "FOCUS",  value: "\(run.totalRunFocusMinutes / 60)H")
-            }
-            .frame(height: 72)
-            .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1).padding(.horizontal, 24))
-            .padding(.horizontal, 24)
-
-            HStack(spacing: 0) {
-                statCell(label: "SESSIONS", value: "\(run.totalNightCheckIns)")
-                Rectangle().fill(GGColors.border).frame(width: 1)
-                statCell(label: "BEST STREAK", value: "\(run.allTimeBestStreak) DAYS")
-                Rectangle().fill(GGColors.border).frame(width: 1)
-                statCell(label: "LEVEL", value: run.ghostLevel.rawValue)
-            }
-            .frame(height: 72)
-            .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1).padding(.horizontal, 24))
-            .padding(.horizontal, 24)
+            statRow([
+                ("AVG SCORE",  "\(run.averageDisciplineScore)"),
+                ("BEST SCORE", "\(run.allTimeBestScore)"),
+                ("FOCUS",      "\(run.totalRunFocusMinutes / 60)H \(run.totalRunFocusMinutes % 60)M")
+            ])
+            Rectangle().fill(GGColors.border).frame(height: 1)
+            statRow([
+                ("SESSIONS",     "\(run.totalNightCheckIns)"),
+                ("BEST STREAK",  "\(run.allTimeBestStreak)"),
+                ("LEVEL",        run.ghostLevel.rawValue)
+            ])
         }
         .padding(.vertical, 20)
+    }
+
+    private func statRow(_ cells: [(String, String)]) -> some View {
+        HStack(spacing: 0) {
+            ForEach(cells.indices, id: \.self) { i in
+                statCell(label: cells[i].0, value: cells[i].1)
+                if i < cells.count - 1 {
+                    Rectangle().fill(GGColors.border).frame(width: 1)
+                }
+            }
+        }
+        .frame(height: 68)
+        // Stroke only wraps the HStack — no double-padding
+        .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
+        .padding(.horizontal, 24)
     }
 
     private func statCell(label: String, value: String) -> some View {
@@ -75,15 +73,17 @@ struct ProgressSectionView: View {
             Text(value)
                 .font(GGFonts.counterSmall)
                 .foregroundStyle(GGColors.textPrimary)
-                .minimumScaleFactor(0.6)
+                .minimumScaleFactor(0.5)
                 .lineLimit(1)
             Text(label)
                 .font(GGFonts.label)
                 .foregroundStyle(GGColors.textTertiary)
                 .tightTracking()
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 14)
+        .padding(.horizontal, 12)
     }
 
     // MARK: - Score chart
@@ -96,84 +96,69 @@ struct ProgressSectionView: View {
                 .tightTracking()
 
             Chart {
-                // Locked-in zone shading
+                // Soft green zone above 80
                 RectangleMark(
-                    xStart: .value("", 0),
+                    xStart: .value("", 1),
                     xEnd:   .value("", 90),
                     yStart: .value("", 80),
                     yEnd:   .value("", 100)
                 )
-                .foregroundStyle(GGColors.accent.opacity(0.06))
+                .foregroundStyle(GGColors.accent.opacity(0.05))
 
                 ForEach(entries) { entry in
-                    // Area fill
                     AreaMark(
-                        x: .value("Day", entry.dayNumber),
-                        yStart: .value("", 0),
+                        x:      .value("Day",   entry.dayNumber),
+                        yStart: .value("",      0),
                         yEnd:   .value("Score", entry.disciplineScore)
                     )
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [GGColors.accent.opacity(0.15), GGColors.accent.opacity(0.0)],
+                            colors: [GGColors.accent.opacity(0.18), .clear],
                             startPoint: .top,
                             endPoint: .bottom
                         )
                     )
                     .interpolationMethod(.catmullRom)
 
-                    // Line
                     LineMark(
-                        x: .value("Day", entry.dayNumber),
+                        x: .value("Day",   entry.dayNumber),
                         y: .value("Score", entry.disciplineScore)
                     )
-                    .foregroundStyle(GGColors.accent.opacity(0.7))
+                    .foregroundStyle(GGColors.accent.opacity(0.75))
                     .lineStyle(StrokeStyle(lineWidth: 1.5))
                     .interpolationMethod(.catmullRom)
 
-                    // Point
                     PointMark(
-                        x: .value("Day", entry.dayNumber),
+                        x: .value("Day",   entry.dayNumber),
                         y: .value("Score", entry.disciplineScore)
                     )
                     .foregroundStyle(pointColor(entry.disciplineScore))
-                    .symbolSize(18)
+                    .symbolSize(16)
                 }
 
-                // Reference line at 80
-                RuleMark(y: .value("Locked In", 80))
+                RuleMark(y: .value("80", 80))
                     .foregroundStyle(GGColors.border)
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                    .annotation(position: .trailing, alignment: .center) {
-                        Text("80")
-                            .font(GGFonts.caption)
-                            .foregroundStyle(GGColors.textTertiary)
-                    }
             }
-            .frame(height: 220)
+            .frame(height: 200)
             .chartYScale(domain: 0...100)
             .chartXScale(domain: 1...90)
             .chartXAxis {
                 AxisMarks(values: [1, 30, 60, 90]) { value in
-                    AxisGridLine()
-                        .foregroundStyle(GGColors.border.opacity(0.4))
+                    AxisGridLine().foregroundStyle(GGColors.border.opacity(0.4))
                     AxisValueLabel {
                         if let v = value.as(Int.self) {
-                            Text("D\(v)")
-                                .font(GGFonts.caption)
-                                .foregroundStyle(GGColors.textTertiary)
+                            Text("D\(v)").font(GGFonts.caption).foregroundStyle(GGColors.textTertiary)
                         }
                     }
                 }
             }
             .chartYAxis {
                 AxisMarks(values: [0, 50, 80, 100]) { value in
-                    AxisGridLine()
-                        .foregroundStyle(GGColors.border.opacity(0.4))
+                    AxisGridLine().foregroundStyle(GGColors.border.opacity(0.4))
                     AxisValueLabel {
                         if let v = value.as(Int.self) {
-                            Text("\(v)")
-                                .font(GGFonts.caption)
-                                .foregroundStyle(GGColors.textTertiary)
+                            Text("\(v)").font(GGFonts.caption).foregroundStyle(GGColors.textTertiary)
                         }
                     }
                 }
@@ -181,21 +166,18 @@ struct ProgressSectionView: View {
             .chartBackground { _ in GGColors.background }
 
             // Legend
-            HStack(spacing: 16) {
-                legendDot(color: GGColors.accent, label: "LOCKED IN (80+)")
-                legendDot(color: GGColors.textPrimary, label: "SOLID (50–79)")
-                legendDot(color: GGColors.danger, label: "OFF (<50)")
+            HStack(spacing: 14) {
+                legendDot(GGColors.accent,       "LOCKED IN (80+)")
+                legendDot(GGColors.textPrimary,  "SOLID (50–79)")
+                legendDot(GGColors.danger,       "OFF (<50)")
             }
         }
     }
 
-    private func legendDot(color: Color, label: String) -> some View {
-        HStack(spacing: 6) {
-            Circle().fill(color).frame(width: 6, height: 6)
-            Text(label)
-                .font(GGFonts.caption)
-                .foregroundStyle(GGColors.textTertiary)
-                .tightTracking()
+    private func legendDot(_ color: Color, _ label: String) -> some View {
+        HStack(spacing: 5) {
+            Circle().fill(color).frame(width: 5, height: 5)
+            Text(label).font(GGFonts.caption).foregroundStyle(GGColors.textTertiary).tightTracking()
         }
     }
 

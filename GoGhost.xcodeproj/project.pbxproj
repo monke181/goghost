@@ -22,6 +22,7 @@
 		33936491A0C4B38427B50762 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1148158583E891673CF92E /* DashboardView.swift */; };
 		3721B209FC9AAB2A11499D84 /* IBMPlexMono-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5864DE1D6AAFB5A4AF378479 /* IBMPlexMono-Medium.otf */; };
 		37D42E06B12E7462E61F3C21 /* WelcomeSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25714ADD7B1F1BC2B5FEBBD5 /* WelcomeSlide.swift */; };
+		482FBB475ADB2FD9EC28FE0B /* GGConfetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FEC4DA361AF4C283177746 /* GGConfetti.swift */; };
 		57D345011DB4E1D5CAB26682 /* Run.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F82806295668D949D97E05 /* Run.swift */; };
 		59519BC4E1330646C3D72624 /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684E17C6EC01BC980F1423B3 /* RootRouter.swift */; };
 		5F30E942ADB71F42A349F4E5 /* DailyEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E5B5A74C3DC7B4E70D7DA9 /* DailyEntry.swift */; };
@@ -119,6 +120,7 @@
 		25714ADD7B1F1BC2B5FEBBD5 /* WelcomeSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSlide.swift; sourceTree = "<group>"; };
 		2E9016F80822A3F154B86521 /* GGFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGFonts.swift; sourceTree = "<group>"; };
 		2ED762AD0B281E4DB420BA9D /* IBMPlexMono-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-SemiBold.otf"; sourceTree = "<group>"; };
+		30FEC4DA361AF4C283177746 /* GGConfetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGConfetti.swift; sourceTree = "<group>"; };
 		33108387EAD6A0C75C75D07D /* GoGhostTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoGhostTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34EFD94545F8A603841D9447 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		36F82806295668D949D97E05 /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 			children = (
 				9F6B16EC3B4B587E3A5E9C8E /* GGAnimations.swift */,
 				762F4A9FE52FF95934246F42 /* GGColors.swift */,
+				30FEC4DA361AF4C283177746 /* GGConfetti.swift */,
 				2E9016F80822A3F154B86521 /* GGFonts.swift */,
 				347AB909FC4E73F53DB641DF /* Components */,
 			);
@@ -615,6 +618,7 @@
 				7A829294138A6806BB77C2F6 /* GGButton.swift in Sources */,
 				D4F5D4C1D671D76EBA12F2CE /* GGCard.swift in Sources */,
 				6B586AD7B2A2CCFB03F1D0DC /* GGColors.swift in Sources */,
+				482FBB475ADB2FD9EC28FE0B /* GGConfetti.swift in Sources */,
 				C9E75DDE5A9419D626977035 /* GGFonts.swift in Sources */,
 				B7BDD991DFB4285745883336 /* GGMomentumBar.swift in Sources */,
 				1BF9BAD1D91EEEBF1914D256 /* GGProgressRing.swift in Sources */,

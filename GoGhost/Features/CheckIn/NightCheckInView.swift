@@ -372,8 +372,24 @@ struct ScoreRevealView: View {
     @State private var displayScore = 0
     @State private var showMeta = false
     @State private var showButton = false
+    @State private var showConfetti = false
+
+    private var shouldCelebrate: Bool {
+        score >= 80 || isNewBestScore || milestoneLabel(streak) != nil
+    }
 
     var body: some View {
+        ZStack {
+            celebrationContent
+
+            if showConfetti {
+                GGConfettiView()
+                    .transition(.opacity)
+            }
+        }
+    }
+
+    private var celebrationContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
 
@@ -462,6 +478,9 @@ struct ScoreRevealView: View {
         .task {
             try? await Task.sleep(for: .milliseconds(1100))
             withAnimation(.easeIn(duration: 0.35)) { showMeta = true }
+            if shouldCelebrate {
+                withAnimation(.easeIn(duration: 0.2)) { showConfetti = true }
+            }
             try? await Task.sleep(for: .milliseconds(600))
             withAnimation(.easeIn(duration: 0.25)) { showButton = true }
         }
