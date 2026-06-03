@@ -5,6 +5,20 @@ struct RootRouter: View {
     @Environment(SubscriptionManager.self) private var subscriptions
 
     var body: some View {
+        #if DEBUG
+        // Launch with `-ggBypassGate 1` to skip onboarding + paywall for testing.
+        if ProcessInfo.processInfo.arguments.contains("-ggBypassGate") {
+            MainAppView()
+        } else {
+            gatedBody
+        }
+        #else
+        gatedBody
+        #endif
+    }
+
+    @ViewBuilder
+    private var gatedBody: some View {
         if !hasCompletedOnboarding {
             OnboardingContainerView()
         } else if subscriptions.isSubscribed {

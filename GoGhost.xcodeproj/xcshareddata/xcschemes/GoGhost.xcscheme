@@ -50,6 +50,17 @@
                ReferencedContainer = "container:GoGhost.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B8FB24E04F2531EA6D1E5812"
+               BuildableName = "GoGhostUITests.xctest"
+               BlueprintName = "GoGhostUITests"
+               ReferencedContainer = "container:GoGhost.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

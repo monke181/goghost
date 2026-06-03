@@ -19,6 +19,7 @@
 		246C13107D6859EF70E9486A /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A6834EA029204493ADF8B6 /* LogView.swift */; };
 		269EEC68BD1F389EAEE88D6C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6FA34298CD270BCB4AF500 /* SettingsView.swift */; };
 		284766162DA331C7BBEB6928 /* MorningCheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5AE2DFBFE5472B886CFFFB /* MorningCheckInView.swift */; };
+		2C789B122276B0D9BF52C181 /* ShareRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6810DE806D32B74DBE7EC3CE /* ShareRenderTests.swift */; };
 		2DAF9CCA7611AEB9E4B464C4 /* WidgetDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783852212787E81C21E1EB36 /* WidgetDataStore.swift */; };
 		31D8DB773BF208071B80E36D /* WhySlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CEA57DEA40F26A5BECD7566 /* WhySlide.swift */; };
 		33936491A0C4B38427B50762 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1148158583E891673CF92E /* DashboardView.swift */; };
@@ -62,6 +63,7 @@
 		D41F27338AB77E365CD98CFF /* GoGhostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */; };
 		D4F5D4C1D671D76EBA12F2CE /* GGCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D4AA063A2AF71FF188C129 /* GGCard.swift */; };
 		D595464AA3DFFF11A4E352BA /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */; };
+		D8C67BE1E91A39280457C6E3 /* ConfettiUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB0A13577DBABEE2D6CAEF7 /* ConfettiUITest.swift */; };
 		D94DF04D6038C49077530EAD /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19014FECB783B41AEC839598 /* OnboardingViewModel.swift */; };
 		DA49D6076366FCCCC2AB04D0 /* GhostModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54878320BB95DAD811222EC8 /* GhostModeViewModel.swift */; };
 		DA720A2D49607E95CB4F5C4C /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA357043B06FAA9B714A92E /* DebugView.swift */; };
@@ -71,12 +73,20 @@
 		F1CF59FBEF25928FCD16A1E4 /* ReflectionsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15573B77DED0C94479004EE5 /* ReflectionsSectionView.swift */; };
 		F1E09FE9DF83CB36F14DEACE /* JournalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB524F4DAFA20586401A93C8 /* JournalSectionView.swift */; };
 		F3FDDEF3E81E240FD43F2C0B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C646FBD907DF00CCB753C6E /* WidgetKit.framework */; };
+		F5CCE21FBB4769F84B6CAE55 /* ConfettiRenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1C7796113C49EFEDFF5739 /* ConfettiRenderTests.swift */; };
 		F8E53AF252974586499598CC /* FocusAreasSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */; };
 		F8F63C6450B3FEF7D5343459 /* ProgressSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F773C31B3503C1419BBA75 /* ProgressSectionView.swift */; };
 		FEC8629BB1E28D12D15D0ADB /* GGBottomNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09003748A3A7E2E71637AC46 /* GGBottomNav.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4862405B9A9B654D23A26C0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E4EC37437AE5FA1864A86C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6336F6204286BFE7ACD32F56;
+			remoteInfo = GoGhost;
+		};
 		54205EF66F3C6B9B5C16ACE6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2E4EC37437AE5FA1864A86C1 /* Project object */;
@@ -120,13 +130,16 @@
 		23B5781A27EE37A5666A2D51 /* CommitSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitSlide.swift; sourceTree = "<group>"; };
 		24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoGhostTests.swift; sourceTree = "<group>"; };
 		25714ADD7B1F1BC2B5FEBBD5 /* WelcomeSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeSlide.swift; sourceTree = "<group>"; };
+		2CB0A13577DBABEE2D6CAEF7 /* ConfettiUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiUITest.swift; sourceTree = "<group>"; };
 		2E9016F80822A3F154B86521 /* GGFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGFonts.swift; sourceTree = "<group>"; };
 		2ED762AD0B281E4DB420BA9D /* IBMPlexMono-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-SemiBold.otf"; sourceTree = "<group>"; };
+		2F1C7796113C49EFEDFF5739 /* ConfettiRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiRenderTests.swift; sourceTree = "<group>"; };
 		30FEC4DA361AF4C283177746 /* GGConfetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGConfetti.swift; sourceTree = "<group>"; };
 		33108387EAD6A0C75C75D07D /* GoGhostTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoGhostTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34EFD94545F8A603841D9447 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		36F82806295668D949D97E05 /* Run.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Run.swift; sourceTree = "<group>"; };
 		3E0F895E16CC342B9B02A97B /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		3E89BA6AB748006CBEE88C8F /* GoGhostUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = GoGhostUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44B1457C898080F9FA998276 /* SystemSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSlide.swift; sourceTree = "<group>"; };
 		479B68D66F23E33BE004AA66 /* LaunchSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchSlide.swift; sourceTree = "<group>"; };
 		54878320BB95DAD811222EC8 /* GhostModeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostModeViewModel.swift; sourceTree = "<group>"; };
@@ -138,6 +151,7 @@
 		5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
 		5E57599C03F0A38E411A2AC6 /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		640E982D139A9CBF487A0FD6 /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
+		6810DE806D32B74DBE7EC3CE /* ShareRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareRenderTests.swift; sourceTree = "<group>"; };
 		684E17C6EC01BC980F1423B3 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
 		6E3B7B537832E101A7D675C5 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreasSlide.swift; sourceTree = "<group>"; };
@@ -219,6 +233,7 @@
 			children = (
 				9B2DC17EF1871151185ABB96 /* GoGhost.app */,
 				33108387EAD6A0C75C75D07D /* GoGhostTests.xctest */,
+				3E89BA6AB748006CBEE88C8F /* GoGhostUITests.xctest */,
 				94AFA6E2B3DC6E7F5FF42E85 /* GoGhostWidget.appex */,
 			);
 			name = Products;
@@ -312,7 +327,9 @@
 		6EAE833D75E9FC7864327650 /* GoGhostTests */ = {
 			isa = PBXGroup;
 			children = (
+				2F1C7796113C49EFEDFF5739 /* ConfettiRenderTests.swift */,
 				24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */,
+				6810DE806D32B74DBE7EC3CE /* ShareRenderTests.swift */,
 			);
 			path = GoGhostTests;
 			sourceTree = "<group>";
@@ -351,6 +368,14 @@
 				05E473AA8A384F203C28D1FC /* Settings */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		98448CFF6FACF233A185D1F8 /* GoGhostUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2CB0A13577DBABEE2D6CAEF7 /* ConfettiUITest.swift */,
+			);
+			path = GoGhostUITests;
 			sourceTree = "<group>";
 		};
 		9A472CCCD17D10EFADBC0E9E /* CheckIn */ = {
@@ -415,6 +440,7 @@
 			children = (
 				E58D55CA112E9D37FA3C5C72 /* GoGhost */,
 				6EAE833D75E9FC7864327650 /* GoGhostTests */,
+				98448CFF6FACF233A185D1F8 /* GoGhostUITests */,
 				C2548AA72A36C5F33B42D129 /* GoGhostWidget */,
 				532039DB1C2FCE4731CC3EE6 /* Frameworks */,
 				0862BFC37213AF5A3C6F54B2 /* Products */,
@@ -492,6 +518,24 @@
 			productReference = 9B2DC17EF1871151185ABB96 /* GoGhost.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B8FB24E04F2531EA6D1E5812 /* GoGhostUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20CF286DD7B7088F2EE4400B /* Build configuration list for PBXNativeTarget "GoGhostUITests" */;
+			buildPhases = (
+				58934EED0F10ABD935B85ABC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00F0FCBDBCBDE7FEA16877E7 /* PBXTargetDependency */,
+			);
+			name = GoGhostUITests;
+			packageProductDependencies = (
+			);
+			productName = GoGhostUITests;
+			productReference = 3E89BA6AB748006CBEE88C8F /* GoGhostUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		C021BBF9B13BB0CAF57228F7 /* GoGhostTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D3FEC6A77CE07E00519F1B6 /* Build configuration list for PBXNativeTarget "GoGhostTests" */;
@@ -540,6 +584,10 @@
 					6336F6204286BFE7ACD32F56 = {
 						DevelopmentTeam = R6PW26GDMS;
 					};
+					B8FB24E04F2531EA6D1E5812 = {
+						DevelopmentTeam = R6PW26GDMS;
+						TestTargetID = 6336F6204286BFE7ACD32F56;
+					};
 					C021BBF9B13BB0CAF57228F7 = {
 						DevelopmentTeam = R6PW26GDMS;
 					};
@@ -567,6 +615,7 @@
 			targets = (
 				6336F6204286BFE7ACD32F56 /* GoGhost */,
 				C021BBF9B13BB0CAF57228F7 /* GoGhostTests */,
+				B8FB24E04F2531EA6D1E5812 /* GoGhostUITests */,
 				F297FD6B9C2B4AB7329DEC8E /* GoGhostWidget */,
 			);
 		};
@@ -589,11 +638,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		58934EED0F10ABD935B85ABC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8C67BE1E91A39280457C6E3 /* ConfettiUITest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		92D4ABE9C0CC8558691B0FB8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5CCE21FBB4769F84B6CAE55 /* ConfettiRenderTests.swift in Sources */,
 				D41F27338AB77E365CD98CFF /* GoGhostTests.swift in Sources */,
+				2C789B122276B0D9BF52C181 /* ShareRenderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -668,6 +727,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		00F0FCBDBCBDE7FEA16877E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6336F6204286BFE7ACD32F56 /* GoGhost */;
+			targetProxy = 4862405B9A9B654D23A26C0F /* PBXContainerItemProxy */;
+		};
 		5AB73D7906F4EC97E7F0186A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F297FD6B9C2B4AB7329DEC8E /* GoGhostWidget */;
@@ -681,6 +745,40 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		257E1C8D5DA0B07FFBDEB931 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hxndrd.goghost.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GoGhost;
+			};
+			name = Debug;
+		};
+		5AC75ACAC4CB761D8E609439 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hxndrd.goghost.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GoGhost;
+			};
+			name = Release;
+		};
 		6783DE42D98C9E64EB1EDB70 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -720,6 +818,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -819,6 +918,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -909,6 +1009,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		20CF286DD7B7088F2EE4400B /* Build configuration list for PBXNativeTarget "GoGhostUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				257E1C8D5DA0B07FFBDEB931 /* Debug */,
+				5AC75ACAC4CB761D8E609439 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		2D3FEC6A77CE07E00519F1B6 /* Build configuration list for PBXNativeTarget "GoGhostTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -9,17 +9,21 @@ import SwiftUI
 //     - New UUID   → forces view recreation, restarting the burst (RunCompleteView page changes)
 
 struct GGConfettiView: View {
-    private let particles: [Particle]
-    private let startDate = Date()
+    // @State so SwiftUI initializes these ONCE per view identity and preserves them
+    // across parent re-renders. A plain `let` would re-randomize particles and reset
+    // startDate every render, making the animation visibly restart ("reloading").
+    @State private var particles: [Particle]
+    @State private var startDate: Date
 
-    init(count: Int = 110) {
+    init(count: Int = 110, fixedStart: Date? = nil) {
+        _startDate = State(initialValue: fixedStart ?? Date())
         let palette: [Color] = [
             Color(hex: "22C55E"), Color(hex: "22C55E"), Color(hex: "22C55E"), Color(hex: "22C55E"),
             .white, .white, .white,
             Color(hex: "4ADE80"), Color(hex: "4ADE80"),
             Color(hex: "86EFAC")
         ]
-        particles = (0..<count).map { _ in
+        let generated = (0..<count).map { _ in
             Particle(
                 x:          CGFloat.random(in: -0.05...1.05),
                 y:          CGFloat.random(in: -0.08...0.0),
@@ -33,10 +37,10 @@ struct GGConfettiView: View {
                 delay:      Double.random(in: 0...0.5)
             )
         }
+        _particles = State(initialValue: generated)
     }
 
     var body: some View {
-        // Capture these locally so the Canvas closure is a pure function of them.
         let p = particles
         let s = startDate
 

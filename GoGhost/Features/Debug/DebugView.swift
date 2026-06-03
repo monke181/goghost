@@ -15,6 +15,12 @@ private struct Preview: Identifiable {
         case weekRecap
         case runComplete
         case paywall
+        // Isolated screenshot previews
+        case dashboardIsolated
+        case morningCheckIn
+        case ghostModeIsolated
+        case logIsolated
+        case nightCheckIn
     }
 
     static func scoreReveal(score: Int, streak: Int = 0, freezeUsed: Bool = false,
@@ -188,6 +194,42 @@ struct DebugView: View {
                         }
                     }
 
+                    // MARK: Screenshot Data
+
+                    section("SCREENSHOT DATA")
+
+                    infoRow("Seed first, then use the isolated previews below. Each opens a clean full-screen view with no tab bar.")
+
+                    row("Seed screenshot data") {
+                        seedScreenshotData()
+                    }
+
+                    infoRow("Isolated previews — swipe down to close, or complete the flow.")
+
+                    row("→ Dashboard") {
+                        preview = Preview(kind: .dashboardIsolated)
+                    }
+                    row("→ Ghost Mode") {
+                        preview = Preview(kind: .ghostModeIsolated)
+                    }
+                    row("→ Log") {
+                        preview = Preview(kind: .logIsolated)
+                    }
+                    if let run {
+                        row("→ Morning Check-In") {
+                            preview = Preview(kind: .morningCheckIn)
+                        }
+                        row("→ Night Check-In") {
+                            preview = Preview(kind: .nightCheckIn)
+                        }
+                        row("→ Weekly Recap") {
+                            preview = Preview(kind: .weekRecap)
+                        }
+                        row("→ Run Complete") {
+                            preview = Preview(kind: .runComplete)
+                        }
+                    }
+
                     // MARK: Onboarding
 
                     section("ONBOARDING")
@@ -335,6 +377,25 @@ struct DebugView: View {
 
             case .paywall:
                 PaywallView()
+
+            case .dashboardIsolated:
+                DashboardView()
+
+            case .ghostModeIsolated:
+                GhostModeView()
+
+            case .logIsolated:
+                LogView()
+
+            case .morningCheckIn:
+                if let run {
+                    MorningCheckInView(run: run)
+                }
+
+            case .nightCheckIn:
+                if let run {
+                    NightCheckInView(run: run)
+                }
             }
         }
     }
@@ -485,6 +546,188 @@ struct DebugView: View {
             try? context.save()
         }
 
+        WidgetDataStore.write(from: run)
+    }
+
+    // MARK: - Screenshot data seeder
+
+    private func seedScreenshotData() {
+        for r in runs { context.delete(r) }
+        try? context.save()
+
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: .now)
+        // 46 days elapsed → dayNumber == 47
+        let startDate = cal.date(byAdding: .day, value: -46, to: today)!
+
+        let run = Run(
+            name: "90-DAY RUN",
+            why: "I'm tired of knowing what I'm capable of and not doing it. This is the year I stop planning and start executing.",
+            focusAreas: ["FITNESS", "DEEP WORK", "DISCIPLINE"],
+            goals: ["No social media before noon", "Gym 5x per week", "Ship the app"],
+            startDate: startDate
+        )
+        run.completedGoals = ["No social media before noon"]
+        run.streakFreezeCount = 2
+        context.insert(run)
+
+        let goalSlots: [[String]] = [
+            ["Finish the backend feature", "Hit the gym — no excuses", "Read 30 pages"],
+            ["90-min deep work before noon", "Cold shower at 6am", "No social media until 5pm"],
+            ["Ship the auth flow", "Meal prep for the week", "Journal for 15 minutes"],
+            ["Fix the login bug", "Walk 10k steps", "Call back the team"],
+            ["Write the spec doc", "Morning run — 5K", "No YouTube today"],
+            ["Review and close tickets", "Strength training — don't skip", "Finish the chapter"],
+            ["Refactor the data layer", "Stretch + mobility work", "Meditate 10 minutes"],
+            ["Prep the demo", "Box jumps and deadlifts", "Review my goals"],
+        ]
+        let focusAreaPool  = ["DEEP WORK", "FITNESS", "DISCIPLINE", "LEARNING", "HEALTH"]
+        let motivationPool = [7, 8, 9, 7, 8, 9, 8, 7, 9, 8]
+
+        let winsPool = [
+            "Crushed the morning gym session — hit a new PR on deadlifts",
+            "Shipped the feature. Team was impressed. Momentum is building.",
+            "Read 40 pages. Didn't check my phone until noon.",
+            "90-min deep work block, fully uninterrupted. This is what locked in feels like.",
+            "Cold shower every morning this week. The discipline is compounding.",
+            "Woke up before the alarm for the first time in weeks.",
+            "Stayed off social media the entire day — didn't even miss it.",
+            "Prepped meals Sunday, saved 3 hours this week.",
+            "Made the hard call in the meeting. Said what needed to be said.",
+            "Finished the chapter I'd been putting off. Finally.",
+            "6am gym session done before most people are awake.",
+            "Wrote 800 words of the spec. Thinking clearly."
+        ]
+        let lossesPool = [
+            "Got sucked into YouTube for 45 minutes mid-afternoon",
+            "Checked Twitter before bed — should have logged off at 9",
+            "Procrastinated on the hard task until 4pm",
+            "Missed the second half of my workout — cut it short",
+            "Late-night snacking — broke the clean streak",
+            "Scrolled Instagram after lunch for longer than I should have",
+            "Skipped the journal — told myself I'd do it later",
+            "Got pulled into a two-hour meeting that could have been an email",
+            "Doomscrolled 20 min before I caught myself",
+            "Ate out instead of cooking — convenience won"
+        ]
+        let distractionsPool = [
+            "Phone notifications all afternoon",
+            "YouTube rabbit hole after lunch",
+            "Instagram between tasks",
+            "Group chat getting noisy",
+            "News sites in the background",
+            "Reddit during a break that went too long",
+            "Slack pings derailing deep work",
+            "TV noise from the other room"
+        ]
+        let lessonsPool = [
+            "Block apps before opening the browser — don't rely on willpower",
+            "Start with the hardest task before anything else",
+            "Sleep is a discipline — treat the cutoff like a commitment",
+            "Preparation beats willpower every time",
+            "The gap between who I am and who I want to be closes one day at a time",
+            "Don't negotiate with distractions — just remove them",
+            "Tomorrow's execution starts with tonight's prep",
+            "When motivation dips, the system holds",
+            "1% better every day compounds into something unrecognizable",
+            "\"I don't feel like it\" is not a reason — it's just noise"
+        ]
+        let journalPool = [
+            "Today I dialed in. Deep work locked before 10am, didn't surface until noon. That's the kind of focus I'm building this run around. The streak is real and it's changing how I show up.",
+            "Struggled to start this morning — didn't want to move. Did it anyway. Discipline isn't a feeling, it's a decision. Made it again today.",
+            "Looking back at day 1 — I'm not the same person. Not dramatically, just quietly. The reps stack. I can feel the compound effect.",
+            "Had a close call today — almost scrolled instead of working. Caught it. Closed the app. That moment of choosing differently is exactly what this run is training.",
+            "Something shifted this week. The work feels lighter. Not because it's easier, but because I've stopped arguing with myself about whether to do it.",
+            "Momentum is a real thing. The first few weeks were a fight. Now the streak continues on its own gravity. It's becoming who I am.",
+            "Got distracted in the afternoon. Disappointed, but I came back and closed strong. A full day still counts. Don't let one slip become two.",
+            "The why is staying clear. I want to look back at this period knowing I gave it everything. No half-measures, no excuses.",
+            "Gym at 6, deep work by 8, no phone until noon. Simple formula. Simple doesn't mean easy — but it means replicable.",
+            "Days like today remind me why I started. Clear head, clean execution, no noise. This is the standard I'm raising for myself."
+        ]
+        let improvedOnPool = [
+            "Stayed off my phone after 9pm",
+            "Got to bed 45 minutes earlier",
+            "Drank water before coffee",
+            "No doom-scrolling at lunch — actually rested",
+            "Prepped tomorrow's priorities before closing the laptop",
+            "Set my three non-negotiables before opening any apps",
+            "Stopped at one coffee — skipped the afternoon one",
+            "Closed my laptop at a decent hour"
+        ]
+        let tomorrowPool = [
+            "90-min deep work block before any meetings",
+            "Gym by 6:30am — no snooze, no negotiation",
+            "Ship the dashboard feature — it's been on the list too long",
+            "Read 20 pages before noon",
+            "Cold shower first — sets the whole day's tone",
+            "Phone off until 10am",
+            "Write the spec before touching the code",
+            "Get to bed by 10pm — sleep is part of the protocol"
+        ]
+
+        // Days 3, 7, 11, 16, 20 missed the night check-in (realistic early imperfection)
+        let missedNights: Set<Int> = [3, 7, 11, 16, 20]
+        // Deterministic score/focus arrays (index % 8)
+        let streakNightRatings = [8, 8, 9, 8, 7, 9, 8, 7]
+        let earlyNightRatings  = [6, 7, 6, 7, 8, 5, 7, 6]
+        let streakFocusMin     = [90, 75, 105, 90, 60, 120, 75, 90]
+        let earlyFocusMin      = [45, 30, 60, 45, 20, 75, 45, 30]
+
+        for dayIndex in 0..<46 {
+            let dayNum = dayIndex + 1
+            let date   = cal.date(byAdding: .day, value: dayIndex, to: startDate)!
+            let isMissed = missedNights.contains(dayNum)
+            let isStreak = dayNum > 20   // days 21-46 are the locked-in streak
+
+            let entry = DailyEntry(date: date, dayNumber: dayNum)
+            entry.run = run
+
+            let goals = goalSlots[dayIndex % goalSlots.count]
+            entry.morningCheckInCompleted = true
+            entry.morningGoal1 = goals[0]
+            entry.morningGoal2 = goals[1]
+            entry.morningGoal3 = goals[2]
+            entry.morningFocusArea = focusAreaPool[dayIndex % focusAreaPool.count]
+            entry.morningMotivationLevel = motivationPool[dayIndex % motivationPool.count]
+
+            entry.nightCheckInCompleted = !isMissed
+            if !isMissed {
+                entry.nightWins           = winsPool[dayIndex % winsPool.count]
+                entry.nightLosses         = lossesPool[dayIndex % lossesPool.count]
+                entry.nightDistractedBy   = distractionsPool[dayIndex % distractionsPool.count]
+                entry.nightLessons        = lessonsPool[dayIndex % lessonsPool.count]
+                entry.nightTomorrowMustDo = tomorrowPool[dayIndex % tomorrowPool.count]
+                entry.nightJournal        = journalPool[dayIndex % journalPool.count]
+                entry.nightImprovedOn     = improvedOnPool[dayIndex % improvedOnPool.count]
+                entry.nightScoreRating    = isStreak ? streakNightRatings[dayIndex % 8] : earlyNightRatings[dayIndex % 8]
+                entry.morningGoal1Done    = true
+                entry.morningGoal2Done    = isStreak || dayNum > 10
+                entry.morningGoal3Done    = isStreak
+                entry.dopamineAvoided     = dayNum > 30 ? ["SOCIAL MEDIA"] : []
+                entry.totalFocusMinutes   = isStreak ? streakFocusMin[dayIndex % 8] : earlyFocusMin[dayIndex % 8]
+            } else {
+                entry.totalFocusMinutes = 10
+            }
+
+            context.insert(entry)
+        }
+
+        // Today: morning done, tonight pending
+        let todayEntry = DailyEntry(date: today, dayNumber: 47)
+        todayEntry.run = run
+        todayEntry.morningCheckInCompleted = true
+        todayEntry.morningGoal1 = "Ship the redesign feature"
+        todayEntry.morningGoal2 = "45-min morning run"
+        todayEntry.morningGoal3 = "No Reddit until evening"
+        todayEntry.morningFocusArea = "DEEP WORK"
+        todayEntry.morningMotivationLevel = 8
+        todayEntry.totalFocusMinutes = 45
+        context.insert(todayEntry)
+
+        // Streak: days 21-46 nights (26 days) + today morning = 27
+        run.allTimeBestStreak = 27
+
+        try? context.save()
         WidgetDataStore.write(from: run)
     }
 }

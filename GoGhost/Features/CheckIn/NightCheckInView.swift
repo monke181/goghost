@@ -410,23 +410,42 @@ struct ScoreRevealView: View {
         score >= 80 || isNewBestScore || milestoneLabel(streak) != nil
     }
 
+    // Single task on the root view — never cancelled by content changes inside.
     var body: some View {
         ZStack {
-            celebrationContent
-
+            scoreContent
             if showConfetti {
                 GGConfettiView()
-                    .id("score-confetti")  // stable id → never re-created once shown
+                    .id("score-confetti")
             }
         }
-        .onChange(of: showMeta) { _, showing in
-            if showing && shouldCelebrate {
+        .task {
+            // Count up
+            for i in 1...24 {
+                try? await Task.sleep(for: .milliseconds(40))
+                displayScore = Int(Double(score) * Double(i) / 24.0)
+            }
+            // Show meta + confetti together
+            withAnimation(.easeIn(duration: 0.35)) { showMeta = true }
+            if shouldCelebrate {
                 withAnimation(.easeIn(duration: 0.2)) { showConfetti = true }
+            }
+            // Show button after a beat
+            try? await Task.sleep(for: .milliseconds(700))
+            withAnimation(.easeIn(duration: 0.25)) { showButton = true }
+        }
+        .fullScreenCover(isPresented: $showWeekRecap) {
+            if let ws = weekSummary {
+                WeeklyRecapView(summary: ws) {
+                    showWeekRecap = false
+                    onDone()
+                }
             }
         }
     }
 
-    private var celebrationContent: some View {
+    // Pure display — no tasks or lifecycle modifiers
+    private var scoreContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
 
@@ -496,11 +515,8 @@ struct ScoreRevealView: View {
             if showButton {
                 VStack(spacing: 12) {
                     GGPrimaryButton(title: buttonLabel(score), action: onDone)
-
                     if weekSummary != nil {
-                        Button {
-                            showWeekRecap = true
-                        } label: {
+                        Button { showWeekRecap = true } label: {
                             Text("VIEW THIS WEEK  →")
                                 .font(GGFonts.label)
                                 .foregroundStyle(GGColors.accent)
@@ -515,26 +531,6 @@ struct ScoreRevealView: View {
             } else {
                 Color.clear.frame(height: 110)
             }
-        }
-        .fullScreenCover(isPresented: $showWeekRecap) {
-            if let ws = weekSummary {
-                WeeklyRecapView(summary: ws) {
-                    showWeekRecap = false
-                    onDone()
-                }
-            }
-        }
-        .task {
-            for i in 1...24 {
-                try? await Task.sleep(for: .milliseconds(40))
-                displayScore = Int(Double(score) * Double(i) / 24.0)
-            }
-        }
-        .task {
-            try? await Task.sleep(for: .milliseconds(1100))
-            withAnimation(.easeIn(duration: 0.35)) { showMeta = true }
-            try? await Task.sleep(for: .milliseconds(600))
-            withAnimation(.easeIn(duration: 0.25)) { showButton = true }
         }
     }
 

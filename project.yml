@@ -50,6 +50,7 @@ targets:
     scheme:
       testTargets:
         - GoGhostTests
+        - GoGhostUITests
     dependencies:
       - sdk: FamilyControls.framework
       - sdk: ManagedSettings.framework
@@ -88,3 +89,16 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hxndrd.goghost.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  GoGhostUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: GoGhostUITests
+    dependencies:
+      - target: GoGhost
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hxndrd.goghost.uitests
+        GENERATE_INFOPLIST_FILE: YES
