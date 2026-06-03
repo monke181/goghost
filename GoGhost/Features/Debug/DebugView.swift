@@ -37,6 +37,7 @@ struct DebugView: View {
     @Environment(\.modelContext) private var context
 
     @State private var preview: Preview?
+    @State private var seededRun: Run?
 
     private var run: Run? { runs.first }
 
@@ -198,36 +199,33 @@ struct DebugView: View {
 
                     section("SCREENSHOT DATA")
 
-                    infoRow("Seed first, then use the isolated previews below. Each opens a clean full-screen view with no tab bar.")
-
-                    row("Seed screenshot data") {
-                        seedScreenshotData()
-                    }
-
-                    infoRow("Isolated previews — swipe down to close, or complete the flow.")
+                    infoRow("Each preview seeds fresh mock data and opens full-screen. No tab bar, no chrome. Swipe down or complete flow to exit.")
 
                     row("→ Dashboard") {
+                        seedScreenshotData()
                         preview = Preview(kind: .dashboardIsolated)
+                    }
+                    row("→ Morning Check-In") {
+                        seedScreenshotData()
+                        preview = Preview(kind: .morningCheckIn)
                     }
                     row("→ Ghost Mode") {
                         preview = Preview(kind: .ghostModeIsolated)
                     }
                     row("→ Log") {
+                        seedScreenshotData()
                         preview = Preview(kind: .logIsolated)
                     }
-                    if let run {
-                        row("→ Morning Check-In") {
-                            preview = Preview(kind: .morningCheckIn)
-                        }
-                        row("→ Night Check-In") {
-                            preview = Preview(kind: .nightCheckIn)
-                        }
-                        row("→ Weekly Recap") {
-                            preview = Preview(kind: .weekRecap)
-                        }
-                        row("→ Run Complete") {
-                            preview = Preview(kind: .runComplete)
-                        }
+                    row("→ Night Check-In") {
+                        seedScreenshotData()
+                        preview = Preview(kind: .nightCheckIn)
+                    }
+                    row("→ Weekly Recap") {
+                        preview = Preview(kind: .weekRecap)
+                    }
+                    row("→ Run Complete") {
+                        seedScreenshotData()
+                        preview = Preview(kind: .runComplete)
                     }
 
                     // MARK: Onboarding
@@ -359,8 +357,8 @@ struct DebugView: View {
                 WeeklyRecapView(summary: mockWeekSummary()) { preview = nil }
 
             case .runComplete:
-                if let run {
-                    RunCompleteView(run: run) { preview = nil }
+                if let r = seededRun ?? run {
+                    RunCompleteView(run: r) { preview = nil }
                 } else {
                     ZStack {
                         GGColors.background.ignoresSafeArea()
@@ -388,13 +386,13 @@ struct DebugView: View {
                 LogView()
 
             case .morningCheckIn:
-                if let run {
-                    MorningCheckInView(run: run)
+                if let r = seededRun ?? run {
+                    MorningCheckInView(run: r)
                 }
 
             case .nightCheckIn:
-                if let run {
-                    NightCheckInView(run: run)
+                if let r = seededRun ?? run {
+                    NightCheckInView(run: r)
                 }
             }
         }
@@ -729,6 +727,7 @@ struct DebugView: View {
 
         try? context.save()
         WidgetDataStore.write(from: run)
+        seededRun = run
     }
 }
 #endif
