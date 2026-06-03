@@ -10,6 +10,15 @@ struct GhostModeView: View {
 
     private var run: Run? { runs.first }
 
+    private var todayGoals: [String] {
+        guard let run else { return [] }
+        let today = Calendar.current.startOfDay(for: .now)
+        guard let entry = run.entries.first(where: { Calendar.current.startOfDay(for: $0.date) == today }),
+              entry.morningCheckInCompleted else { return [] }
+        return [entry.morningGoal1, entry.morningGoal2, entry.morningGoal3]
+            .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+    }
+
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -64,7 +73,59 @@ struct GhostModeView: View {
 
             Spacer()
 
+            // Today's focus checklist
+            if !todayGoals.isEmpty {
+                VStack(alignment: .leading, spacing: 12) {
+                    Rectangle().fill(GGColors.border).frame(height: 1)
+                        .padding(.horizontal, 24)
+
+                    Text("TODAY'S FOCUS")
+                        .font(GGFonts.label)
+                        .foregroundStyle(GGColors.textTertiary)
+                        .tightTracking()
+                        .padding(.horizontal, 24)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(todayGoals, id: \.self) { goal in
+                            HStack(alignment: .center, spacing: 10) {
+                                Rectangle()
+                                    .fill(Color.clear)
+                                    .frame(width: 6, height: 6)
+                                    .overlay(Rectangle().stroke(GGColors.textTertiary, lineWidth: 1))
+                                Text(goal.uppercased())
+                                    .font(GGFonts.label)
+                                    .foregroundStyle(GGColors.textSecondary)
+                                    .tightTracking()
+                                    .lineLimit(1)
+                            }
+                            .padding(.horizontal, 24)
+                        }
+                    }
+
+                    Rectangle().fill(GGColors.border).frame(height: 1)
+                        .padding(.horizontal, 24)
+                }
+                .padding(.bottom, 20)
+            }
+
             VStack(alignment: .leading, spacing: 20) {
+                // Blocked apps (idle only)
+                if vm.state == .idle {
+                    let stm = ScreenTimeManager.shared
+                    if !stm.isSelectionEmpty {
+                        HStack(spacing: 8) {
+                            Rectangle()
+                                .fill(GGColors.accent)
+                                .frame(width: 6, height: 6)
+                            Text("\(stm.selectionSummary) BLOCKED DURING SESSION")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textTertiary)
+                                .tightTracking()
+                        }
+                        .padding(.horizontal, 24)
+                    }
+                }
+
                 // Duration chips (idle only)
                 if vm.state == .idle {
                     HStack(spacing: 0) {
