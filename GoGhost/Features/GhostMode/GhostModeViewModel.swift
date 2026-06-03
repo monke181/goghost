@@ -16,6 +16,15 @@ final class GhostModeViewModel {
     private var timer: Timer?
     private var sessionStart: Date?
 
+    init(mockRunning: Bool = false) {
+        if mockRunning {
+            state = .running
+            selectedMinutes = 25
+            remainingSeconds = 18 * 60 + 32
+            sessionLabel = "building the app"
+        }
+    }
+
     var progress: Double {
         let total = Double(selectedMinutes * 60)
         return total > 0 ? 1.0 - Double(remainingSeconds) / total : 0

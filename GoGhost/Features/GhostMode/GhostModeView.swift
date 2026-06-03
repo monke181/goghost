@@ -6,7 +6,11 @@ struct GhostModeView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Query(filter: #Predicate<Run> { $0.isActive }) private var runs: [Run]
 
-    @State private var vm = GhostModeViewModel()
+    @State private var vm: GhostModeViewModel
+
+    init(mockRunning: Bool = false) {
+        _vm = State(initialValue: GhostModeViewModel(mockRunning: mockRunning))
+    }
 
     private var run: Run? { runs.first }
 

@@ -19,6 +19,7 @@ private struct Preview: Identifiable {
         case dashboardIsolated
         case morningCheckIn
         case ghostModeIsolated
+        case ghostModeRunning
         case logIsolated
         case nightCheckIn
     }
@@ -209,8 +210,12 @@ struct DebugView: View {
                         seedScreenshotData()
                         preview = Preview(kind: .morningCheckIn)
                     }
-                    row("→ Ghost Mode") {
+                    row("→ Ghost Mode (idle)") {
                         preview = Preview(kind: .ghostModeIsolated)
+                    }
+                    row("→ Ghost Mode (running — 18:32 left)") {
+                        seedScreenshotData()
+                        preview = Preview(kind: .ghostModeRunning)
                     }
                     row("→ Log") {
                         seedScreenshotData()
@@ -381,6 +386,9 @@ struct DebugView: View {
 
             case .ghostModeIsolated:
                 GhostModeView()
+
+            case .ghostModeRunning:
+                GhostModeView(mockRunning: true)
 
             case .logIsolated:
                 LogView()
@@ -667,17 +675,19 @@ struct DebugView: View {
 
         // Days 3, 7, 11, 16, 20 missed the night check-in (realistic early imperfection)
         let missedNights: Set<Int> = [3, 7, 11, 16, 20]
-        // Deterministic score/focus arrays (index % 8)
-        let streakNightRatings = [8, 8, 9, 8, 7, 9, 8, 7]
+        // Three scoring tiers so last-7 > prior-7 → MOMENTUM BUILDING on dashboard
         let earlyNightRatings  = [6, 7, 6, 7, 8, 5, 7, 6]
-        let streakFocusMin     = [90, 75, 105, 90, 60, 120, 75, 90]
         let earlyFocusMin      = [45, 30, 60, 45, 20, 75, 45, 30]
+        let midNightRatings    = [6, 7, 6, 7, 7, 6, 7, 6]   // days 21-40
+        let midFocusMin        = [50, 60, 45, 55, 60, 45, 55, 50]
+        let recentNightRatings = [9, 9, 8, 9, 9, 8]          // days 41-46
+        let recentFocusMin     = [105, 90, 120, 100, 90, 110]
 
         for dayIndex in 0..<46 {
             let dayNum = dayIndex + 1
             let date   = cal.date(byAdding: .day, value: dayIndex, to: startDate)!
             let isMissed = missedNights.contains(dayNum)
-            let isStreak = dayNum > 20   // days 21-46 are the locked-in streak
+            let isStreak = dayNum > 20
 
             let entry = DailyEntry(date: date, dayNumber: dayNum)
             entry.run = run
@@ -699,12 +709,23 @@ struct DebugView: View {
                 entry.nightTomorrowMustDo = tomorrowPool[dayIndex % tomorrowPool.count]
                 entry.nightJournal        = journalPool[dayIndex % journalPool.count]
                 entry.nightImprovedOn     = improvedOnPool[dayIndex % improvedOnPool.count]
-                entry.nightScoreRating    = isStreak ? streakNightRatings[dayIndex % 8] : earlyNightRatings[dayIndex % 8]
                 entry.morningGoal1Done    = true
                 entry.morningGoal2Done    = isStreak || dayNum > 10
                 entry.morningGoal3Done    = isStreak
                 entry.dopamineAvoided     = dayNum > 30 ? ["SOCIAL MEDIA"] : []
-                entry.totalFocusMinutes   = isStreak ? streakFocusMin[dayIndex % 8] : earlyFocusMin[dayIndex % 8]
+
+                if dayNum > 40 {
+                    let i = dayNum - 41
+                    entry.nightScoreRating  = recentNightRatings[i]
+                    entry.totalFocusMinutes = recentFocusMin[i]
+                } else if dayNum > 20 {
+                    let i = (dayNum - 21) % 8
+                    entry.nightScoreRating  = midNightRatings[i]
+                    entry.totalFocusMinutes = midFocusMin[i]
+                } else {
+                    entry.nightScoreRating  = earlyNightRatings[dayIndex % 8]
+                    entry.totalFocusMinutes = earlyFocusMin[dayIndex % 8]
+                }
             } else {
                 entry.totalFocusMinutes = 10
             }
