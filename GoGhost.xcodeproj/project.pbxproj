@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00A8B67AF6AF10A6DAC7F58D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55080AFCF67533F913969995 /* Assets.xcassets */; };
 		05715201B782FA118DFBA358 /* WeeklyRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB15C0E0FEF486798A9DD43 /* WeeklyRecapView.swift */; };
+		0604610AE624E5B93D805E50 /* ShareHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B035DAC64CD87A98EB50D /* ShareHelper.swift */; };
 		085EE8380549395DE68B33C6 /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903164D416B66882E3410E6E /* CheckInViewModel.swift */; };
 		09A9293D847CC4B7075864F9 /* GoGhostWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6C32B0A5E6A8B1C5E1D36 /* GoGhostWidget.swift */; };
 		1AAA0DBD6BE7A66EDD9C2106 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA68FB3A13C44E1698B467FE /* JournalEntry.swift */; };
@@ -175,6 +176,7 @@
 		E20E4AFFB1962EDDF2B8A8E7 /* GGTimerDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGTimerDisplay.swift; sourceTree = "<group>"; };
 		EA68FB3A13C44E1698B467FE /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		EEF73A8439094436D594DE8B /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
+		EF7B035DAC64CD87A98EB50D /* ShareHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareHelper.swift; sourceTree = "<group>"; };
 		F3D63CCF2067B7C01297AD8C /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		FB00AFA130936E1592EC9334 /* RunCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunCompleteView.swift; sourceTree = "<group>"; };
 		FB524F4DAFA20586401A93C8 /* JournalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalSectionView.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				C9980EBD84AFE3D345059144 /* GoGhostApp.swift */,
 				6E3B7B537832E101A7D675C5 /* NotificationManager.swift */,
 				82DC761C84B133E0D01FF9EA /* ScreenTimeManager.swift */,
+				EF7B035DAC64CD87A98EB50D /* ShareHelper.swift */,
 				EEF73A8439094436D594DE8B /* SubscriptionManager.swift */,
 				783852212787E81C21E1EB36 /* WidgetDataStore.swift */,
 			);
@@ -652,6 +655,7 @@
 				CC53C81E50CCF65F46F5679F /* ScreenTimeSlide.swift in Sources */,
 				269EEC68BD1F389EAEE88D6C /* SettingsView.swift in Sources */,
 				1D528EFD673C4EBFA6009724 /* SettingsViewModel.swift in Sources */,
+				0604610AE624E5B93D805E50 /* ShareHelper.swift in Sources */,
 				1BA695412B928F1756DF5436 /* SubscriptionManager.swift in Sources */,
 				ED8931084B617247FCC9A070 /* SystemSlide.swift in Sources */,
 				05715201B782FA118DFBA358 /* WeeklyRecapView.swift in Sources */,

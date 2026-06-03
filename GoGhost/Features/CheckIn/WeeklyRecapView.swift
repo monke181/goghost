@@ -56,9 +56,7 @@ struct WeeklyRecapView: View {
 
                         // Actions
                         VStack(spacing: 12) {
-                            Button {
-                                if let img = renderCard() { presentShare(img) }
-                            } label: {
+                            Button { shareCard() } label: {
                                 HStack(spacing: 8) {
                                     Image(systemName: "square.and.arrow.up")
                                         .font(.system(size: 12, weight: .medium))
@@ -97,27 +95,9 @@ struct WeeklyRecapView: View {
     // MARK: - Share
 
     @MainActor
-    private func renderCard() -> UIImage? {
-        let renderer = ImageRenderer(
-            content: WeeklyShareCard(summary: summary)
-                .frame(width: 393, height: 852)
-                .environment(\.colorScheme, .dark)
-        )
-        renderer.scale = UIScreen.main.scale
-        return renderer.uiImage
-    }
-
-    private func presentShare(_ image: UIImage) {
-        let avc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let root = scene.windows.first?.rootViewController else { return }
-        var top = root
-        while let p = top.presentedViewController { top = p }
-        avc.popoverPresentationController?.sourceView = top.view
-        avc.popoverPresentationController?.sourceRect = CGRect(
-            x: top.view.bounds.midX, y: top.view.bounds.midY, width: 0, height: 0
-        )
-        top.present(avc, animated: true)
+    private func shareCard() {
+        guard let img = renderToImage(WeeklyShareCard(summary: summary)) else { return }
+        presentShareSheet(items: [img])
     }
 }
 
@@ -242,7 +222,7 @@ private struct WeeklyShareCard: View {
 
     var body: some View {
         ZStack {
-            GGColors.background.ignoresSafeArea()
+            Rectangle().fill(GGColors.background)  // no ignoresSafeArea — renderer has no safe area
 
             VStack(spacing: 0) {
                 HStack {

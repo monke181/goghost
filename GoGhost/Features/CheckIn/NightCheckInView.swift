@@ -416,7 +416,12 @@ struct ScoreRevealView: View {
 
             if showConfetti {
                 GGConfettiView()
-                    .transition(.opacity)
+                    .id("score-confetti")  // stable id → never re-created once shown
+            }
+        }
+        .onChange(of: showMeta) { _, showing in
+            if showing && shouldCelebrate {
+                withAnimation(.easeIn(duration: 0.2)) { showConfetti = true }
             }
         }
     }
@@ -528,9 +533,6 @@ struct ScoreRevealView: View {
         .task {
             try? await Task.sleep(for: .milliseconds(1100))
             withAnimation(.easeIn(duration: 0.35)) { showMeta = true }
-            if shouldCelebrate {
-                withAnimation(.easeIn(duration: 0.2)) { showConfetti = true }
-            }
             try? await Task.sleep(for: .milliseconds(600))
             withAnimation(.easeIn(duration: 0.25)) { showButton = true }
         }

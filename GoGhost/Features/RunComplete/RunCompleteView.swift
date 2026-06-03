@@ -69,9 +69,7 @@ struct RunCompleteView: View {
                         .tightTracking()
                     Spacer()
                     Button {
-                        if let img = renderShareCard(index: index) {
-                            presentShareSheet(image: img)
-                        }
+                        shareCard(at: index)
                     } label: {
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 15, weight: .medium))
@@ -126,27 +124,9 @@ struct RunCompleteView: View {
     // MARK: - Share
 
     @MainActor
-    private func renderShareCard(index: Int) -> UIImage? {
-        let renderer = ImageRenderer(
-            content: ShareCardWrapper(index: index, run: run)
-                .frame(width: 393, height: 852)
-                .environment(\.colorScheme, .dark)
-        )
-        renderer.scale = UIScreen.main.scale
-        return renderer.uiImage
-    }
-
-    private func presentShareSheet(image: UIImage) {
-        let avc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let root = scene.windows.first?.rootViewController else { return }
-        var top = root
-        while let presented = top.presentedViewController { top = presented }
-        avc.popoverPresentationController?.sourceView = top.view
-        avc.popoverPresentationController?.sourceRect = CGRect(
-            x: top.view.bounds.midX, y: top.view.bounds.midY, width: 0, height: 0
-        )
-        top.present(avc, animated: true)
+    private func shareCard(at index: Int) {
+        guard let img = renderToImage(ShareCardWrapper(index: index, run: run)) else { return }
+        presentShareSheet(items: [img])
     }
 }
 
@@ -158,7 +138,7 @@ private struct ShareCardWrapper: View {
 
     var body: some View {
         ZStack {
-            GGColors.background.ignoresSafeArea()
+            Rectangle().fill(GGColors.background)  // no ignoresSafeArea — renderer has no safe area
 
             VStack(spacing: 0) {
                 // Branding header
