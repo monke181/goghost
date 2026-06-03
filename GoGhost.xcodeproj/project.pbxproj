@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		004FF384D9AFE2B99454302D /* CompactShareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B09846A279C56E86FE67A48 /* CompactShareTests.swift */; };
 		00A8B67AF6AF10A6DAC7F58D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55080AFCF67533F913969995 /* Assets.xcassets */; };
 		00AD90D27C2EDB7A3B1A646B /* ShareLinkUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56803C55EAE6D6363EB4CE21 /* ShareLinkUITest.swift */; };
 		05715201B782FA118DFBA358 /* WeeklyRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB15C0E0FEF486798A9DD43 /* WeeklyRecapView.swift */; };
@@ -155,6 +156,7 @@
 		640E982D139A9CBF487A0FD6 /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
 		6810DE806D32B74DBE7EC3CE /* ShareRenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareRenderTests.swift; sourceTree = "<group>"; };
 		684E17C6EC01BC980F1423B3 /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
+		6B09846A279C56E86FE67A48 /* CompactShareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactShareTests.swift; sourceTree = "<group>"; };
 		6E3B7B537832E101A7D675C5 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7428D6B9A9EA17CBED1BE7DA /* FocusAreasSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAreasSlide.swift; sourceTree = "<group>"; };
 		75DF6CE2483DD2A381C99688 /* RatingPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPicker.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 		6EAE833D75E9FC7864327650 /* GoGhostTests */ = {
 			isa = PBXGroup;
 			children = (
+				6B09846A279C56E86FE67A48 /* CompactShareTests.swift */,
 				2F1C7796113C49EFEDFF5739 /* ConfettiRenderTests.swift */,
 				24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */,
 				6810DE806D32B74DBE7EC3CE /* ShareRenderTests.swift */,
@@ -654,6 +657,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				004FF384D9AFE2B99454302D /* CompactShareTests.swift in Sources */,
 				F5CCE21FBB4769F84B6CAE55 /* ConfettiRenderTests.swift in Sources */,
 				D41F27338AB77E365CD98CFF /* GoGhostTests.swift in Sources */,
 				2C789B122276B0D9BF52C181 /* ShareRenderTests.swift in Sources */,

@@ -228,41 +228,33 @@ struct WeeklyRecapCard: View {
 
 // MARK: - IG story share card (no buttons, branded)
 
-private struct WeeklyShareCard: View {
+struct WeeklyShareCard: View {
     let summary: WeekSummary
 
     var body: some View {
-        ZStack {
-            Rectangle().fill(GGColors.background)  // no ignoresSafeArea — renderer has no safe area
-
-            VStack(spacing: 0) {
-                HStack {
-                    Text("90DAYRUN")
-                        .font(GGFonts.label)
-                        .foregroundStyle(GGColors.textTertiary)
-                        .tightTracking()
-                    Spacer()
-                }
-                .padding(.horizontal, 32)
-                .padding(.top, 56)
-
+        // Compact: fixed spacing, hugs content. Rendered at natural height for sharing.
+        VStack(spacing: 0) {
+            HStack {
+                Text("90DAYRUN")
+                    .font(GGFonts.label)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
                 Spacer()
-
-                WeeklyRecapCard(summary: summary)
-                    .padding(.horizontal, 32)
-
-                Spacer()
-
-                HStack {
-                    Spacer()
-                    Text("90DAYRUN.APP")
-                        .font(GGFonts.caption)
-                        .foregroundStyle(GGColors.textTertiary)
-                        .tightTracking()
-                }
-                .padding(.horizontal, 32)
-                .padding(.bottom, 48)
             }
+            .padding(.bottom, 28)
+
+            WeeklyRecapCard(summary: summary)
+
+            HStack {
+                Spacer()
+                Text("90DAYRUN.APP")
+                    .font(GGFonts.caption)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
+            }
+            .padding(.top, 24)
         }
+        .padding(32)
+        .background(GGColors.background)
     }
 }

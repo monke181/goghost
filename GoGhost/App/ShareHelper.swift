@@ -9,15 +9,20 @@ import UniformTypeIdentifiers
 ///
 /// Uses SwiftUI's ImageRenderer — needs no window or live view hierarchy and renders
 /// synchronously. Reliable for our content (text + rectangles + shapes; no Metal, blur,
-/// or AsyncImage). A fixed proposedSize guarantees a fully-laid-out result every time.
+/// or AsyncImage).
+///
+/// Pass `height: nil` (default) to let the view size to its natural content height —
+/// only the width is constrained, so the resulting image hugs the content vertically.
+/// Pass an explicit height for a fixed aspect ratio.
 @MainActor
-func renderToImage<Content: View>(_ content: Content, width: CGFloat = 393, height: CGFloat = 852) -> UIImage? {
-    let renderer = ImageRenderer(
-        content: content
-            .frame(width: width, height: height)
-            .background(GGColors.background)
-            .environment(\.colorScheme, .dark)
-    )
+func renderToImage<Content: View>(_ content: Content, width: CGFloat = 393, height: CGFloat? = nil) -> UIImage? {
+    let sized = content
+        .frame(width: width)
+        .frame(height: height)   // no-op when height is nil → natural height
+        .background(GGColors.background)
+        .environment(\.colorScheme, .dark)
+
+    let renderer = ImageRenderer(content: sized)
     renderer.proposedSize = ProposedViewSize(width: width, height: height)
     renderer.scale = 3.0
     renderer.isOpaque = true

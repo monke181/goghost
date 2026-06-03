@@ -150,50 +150,40 @@ private struct ShareCardWrapper: View {
     let run: Run
 
     var body: some View {
-        ZStack {
-            Rectangle().fill(GGColors.background)  // no ignoresSafeArea — renderer has no safe area
-
-            VStack(spacing: 0) {
-                // Branding header
-                HStack {
-                    Text("90DAYRUN")
-                        .font(GGFonts.label)
-                        .foregroundStyle(GGColors.textTertiary)
-                        .tightTracking()
-                    Spacer()
-                }
-                .padding(.horizontal, 32)
-                .padding(.top, 56)
-
+        // Compact: fixed spacing, hugs content. Rendered at natural height for sharing.
+        VStack(spacing: 0) {
+            HStack {
+                Text("90DAYRUN")
+                    .font(GGFonts.label)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
                 Spacer()
-
-                Group {
-                    switch index {
-                    case 0: IntroCardContent(run: run)
-                    case 1: DisciplineCardContent(avg: run.averageDisciplineScore, best: run.allTimeBestScore)
-                    case 2: StreakCardContent(best: run.allTimeBestStreak, total: run.totalNightCheckIns)
-                    case 3: FocusCardContent(totalMinutes: run.totalRunFocusMinutes)
-                    case 4: LevelCardContent(level: run.ghostLevel)
-                    default: SummaryCardContent(run: run)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 32)
-
-                Spacer()
-
-                // Branding footer
-                HStack {
-                    Spacer()
-                    Text("90DAYRUN.APP")
-                        .font(GGFonts.caption)
-                        .foregroundStyle(GGColors.textTertiary)
-                        .tightTracking()
-                }
-                .padding(.horizontal, 32)
-                .padding(.bottom, 48)
             }
+            .padding(.bottom, 40)
+
+            Group {
+                switch index {
+                case 0: IntroCardContent(run: run)
+                case 1: DisciplineCardContent(avg: run.averageDisciplineScore, best: run.allTimeBestScore)
+                case 2: StreakCardContent(best: run.allTimeBestStreak, total: run.totalNightCheckIns)
+                case 3: FocusCardContent(totalMinutes: run.totalRunFocusMinutes)
+                case 4: LevelCardContent(level: run.ghostLevel)
+                default: SummaryCardContent(run: run)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack {
+                Spacer()
+                Text("90DAYRUN.APP")
+                    .font(GGFonts.caption)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
+            }
+            .padding(.top, 40)
         }
+        .padding(32)
+        .background(GGColors.background)
     }
 }
 
