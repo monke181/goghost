@@ -53,10 +53,18 @@ struct DashboardView: View {
                         // Streak
                         HStack {
                             Spacer()
-                            Text(run.currentStreak > 0 ? "\(run.currentStreak) DAY STREAK" : "NO STREAK")
-                                .font(GGFonts.label)
-                                .foregroundStyle(run.currentStreak > 0 ? GGColors.accent : GGColors.textTertiary)
-                                .tightTracking()
+                            VStack(spacing: 4) {
+                                Text(run.currentStreak > 0 ? "\(run.currentStreak) DAY STREAK" : "NO STREAK")
+                                    .font(GGFonts.label)
+                                    .foregroundStyle(run.currentStreak > 0 ? GGColors.accent : GGColors.textTertiary)
+                                    .tightTracking()
+                                if run.streakFreezeCount > 0 {
+                                    Text("FREEZE x\(run.streakFreezeCount)")
+                                        .font(GGFonts.caption)
+                                        .foregroundStyle(GGColors.textTertiary)
+                                        .tightTracking()
+                                }
+                            }
                             Spacer()
                         }
                         .padding(.bottom, 32)
@@ -95,6 +103,7 @@ struct DashboardView: View {
                                 label: "MORNING",
                                 status: todayEntryIfExists?.morningCheckInCompleted == true ? "DONE" : "PENDING",
                                 isDone: todayEntryIfExists?.morningCheckInCompleted == true,
+                                score: nil,
                                 action: { showMorning = true }
                             )
                             Rectangle().fill(GGColors.border).frame(width: 1)
@@ -102,6 +111,7 @@ struct DashboardView: View {
                                 label: "TONIGHT",
                                 status: todayEntryIfExists?.nightCheckInCompleted == true ? "DONE" : "PENDING",
                                 isDone: todayEntryIfExists?.nightCheckInCompleted == true,
+                                score: todayEntryIfExists?.nightCheckInCompleted == true ? todayEntryIfExists?.disciplineScore : nil,
                                 action: { showNight = true }
                             )
                         }
@@ -200,6 +210,7 @@ private struct CheckInRow: View {
     let label: String
     let status: String
     let isDone: Bool
+    let score: Int?
     let action: () -> Void
 
     var body: some View {
@@ -209,9 +220,17 @@ private struct CheckInRow: View {
                     .font(GGFonts.label)
                     .foregroundStyle(GGColors.textTertiary)
                     .tightTracking()
-                Text(status)
-                    .font(GGFonts.bodyMed)
-                    .foregroundStyle(isDone ? GGColors.accent : GGColors.textPrimary)
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                    Text(status)
+                        .font(GGFonts.bodyMed)
+                        .foregroundStyle(isDone ? GGColors.accent : GGColors.textPrimary)
+                    if isDone, let score {
+                        Text("/ \(score)")
+                            .font(GGFonts.caption)
+                            .foregroundStyle(GGColors.textTertiary)
+                            .tightTracking()
+                    }
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)

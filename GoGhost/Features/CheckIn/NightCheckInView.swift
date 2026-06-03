@@ -6,6 +6,7 @@ struct NightCheckInView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var vm = CheckInViewModel(mode: .night)
+    @State private var freezeJustUsed = false
 
     private var todayEntry: DailyEntry? {
         let today = Calendar.current.startOfDay(for: .now)
@@ -235,40 +236,55 @@ struct NightCheckInView: View {
             GGPrimaryButton(title: "SUBMIT") {
                 let entry = GoGhost.todayEntry(for: run, context: context)
                 vm.save(to: entry, context: context)
+                autoApplyFreeze()
+                grantFreezeForMilestone()
                 vm.advance()
             }
         }
     }
 
     private var scoreRevealStep: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Spacer()
+        ScoreRevealView(
+            score: vm.computedScore,
+            streak: run.currentStreak,
+            freezeJustUsed: freezeJustUsed,
+            onDone: { dismiss() }
+        )
+    }
 
-            VStack(alignment: .leading, spacing: 16) {
-                Text("DISCIPLINE SCORE")
-                    .font(GGFonts.label)
-                    .foregroundStyle(GGColors.textTertiary)
-                    .tightTracking()
+    private func autoApplyFreeze() {
+        guard run.streakFreezeCount > 0 else { return }
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: .now)
+        let yesterday = cal.date(byAdding: .day, value: -1, to: today)!
+        let twoDaysAgo = cal.date(byAdding: .day, value: -2, to: today)!
 
-                Text("\(vm.computedScore)")
-                    .font(GGFonts.hero)
-                    .foregroundStyle(scoreColor(vm.computedScore))
-                    .contentTransition(.numericText())
+        let yesterdayCheckedIn = run.entries.contains(where: {
+            cal.startOfDay(for: $0.date) == yesterday && $0.nightCheckInCompleted
+        })
+        guard !yesterdayCheckedIn else { return }
 
-                Rectangle().fill(GGColors.border).frame(height: 1)
+        let alreadyFrozen = run.streakFreezeUsedDates.contains(where: {
+            cal.startOfDay(for: $0) == yesterday
+        })
+        guard !alreadyFrozen else { return }
 
-                Text(scoreTagline(vm.computedScore))
-                    .font(GGFonts.body)
-                    .foregroundStyle(GGColors.textSecondary)
-            }
-            .padding(.horizontal, 32)
+        let hadStreakBefore = run.entries.contains(where: {
+            cal.startOfDay(for: $0.date) == twoDaysAgo && $0.nightCheckInCompleted
+        })
+        guard hadStreakBefore else { return }
 
-            Spacer()
+        run.streakFreezeUsedDates.append(yesterday)
+        run.streakFreezeCount -= 1
+        freezeJustUsed = true
+        try? context.save()
+    }
 
-            GGPrimaryButton(title: "DONE") { dismiss() }
-                .padding(.horizontal, 32)
-                .padding(.bottom, 56)
-        }
+    private func grantFreezeForMilestone() {
+        let streak = run.currentStreak
+        guard [7, 14, 21, 30, 60].contains(streak) else { return }
+        run.streakFreezeCount += 1
+        try? context.save()
     }
 
     // MARK: - Helpers
@@ -329,6 +345,92 @@ struct NightCheckInView: View {
         }
     }
 
+}
+
+private struct ScoreRevealView: View {
+    let score: Int
+    let streak: Int
+    let freezeJustUsed: Bool
+    let onDone: () -> Void
+
+    @State private var displayScore = 0
+    @State private var showMeta = false
+    @State private var showButton = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Spacer()
+
+            VStack(alignment: .leading, spacing: 16) {
+                Text("DISCIPLINE SCORE")
+                    .font(GGFonts.label)
+                    .foregroundStyle(GGColors.textTertiary)
+                    .tightTracking()
+
+                Text("\(displayScore)")
+                    .font(GGFonts.hero)
+                    .foregroundStyle(scoreColor(score))
+                    .contentTransition(.numericText(countsDown: false))
+                    .animation(.linear(duration: 0.04), value: displayScore)
+
+                if showMeta {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Rectangle().fill(GGColors.border).frame(height: 1)
+
+                        Text(scoreTagline(score))
+                            .font(GGFonts.body)
+                            .foregroundStyle(GGColors.textSecondary)
+
+                        if streak > 0 {
+                            if freezeJustUsed {
+                                Text("FREEZE USED — \(streak) DAY STREAK SAVED")
+                                    .font(GGFonts.label)
+                                    .foregroundStyle(GGColors.accent.opacity(0.7))
+                                    .tightTracking()
+                            } else {
+                                Text("\(streak) DAY STREAK")
+                                    .font(GGFonts.label)
+                                    .foregroundStyle(GGColors.accent)
+                                    .tightTracking()
+                            }
+                        }
+
+                        if let label = milestoneLabel(streak) {
+                            Text(label)
+                                .font(GGFonts.headline)
+                                .foregroundStyle(GGColors.accent)
+                        }
+                    }
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                }
+            }
+            .padding(.horizontal, 32)
+
+            Spacer()
+
+            if showButton {
+                GGPrimaryButton(title: buttonLabel(score), action: onDone)
+                    .padding(.horizontal, 32)
+                    .padding(.bottom, 56)
+                    .transition(.opacity)
+            } else {
+                Color.clear.frame(height: 110)
+            }
+        }
+        .task {
+            for i in 1...24 {
+                try? await Task.sleep(for: .milliseconds(40))
+                displayScore = Int(Double(score) * Double(i) / 24.0)
+            }
+        }
+        .task {
+            try? await Task.sleep(for: .milliseconds(1100))
+            withAnimation(.easeIn(duration: 0.35)) { showMeta = true }
+            try? await Task.sleep(for: .milliseconds(600))
+            withAnimation(.easeIn(duration: 0.25)) { showButton = true }
+        }
+    }
+
     private func scoreColor(_ s: Int) -> Color {
         if s >= 80 { return GGColors.accent }
         if s >= 50 { return GGColors.textPrimary }
@@ -336,9 +438,27 @@ struct NightCheckInView: View {
     }
 
     private func scoreTagline(_ s: Int) -> String {
+        if s >= 90 { return "Elite. Stay locked." }
         if s >= 80 { return "Locked in." }
-        if s >= 60 { return "Solid day." }
-        if s >= 40 { return "You can do better." }
+        if s >= 70 { return "Solid run." }
+        if s >= 60 { return "Keep the chain." }
+        if s >= 50 { return "Still in it." }
         return "Tomorrow is the one."
+    }
+
+    private func buttonLabel(_ s: Int) -> String {
+        s >= 60 ? "SEE YOU TOMORROW" : "BACK TOMORROW"
+    }
+
+    private func milestoneLabel(_ s: Int) -> String? {
+        switch s {
+        case 7:  return "ONE WEEK STRAIGHT."
+        case 14: return "TWO WEEKS LOCKED."
+        case 21: return "THREE WEEKS IN."
+        case 30: return "30 DAYS. A MONTH STRAIGHT."
+        case 60: return "60 DAYS. PAST HALFWAY."
+        case 90: return "THE 90-DAY RUN IS COMPLETE."
+        default: return nil
+        }
     }
 }

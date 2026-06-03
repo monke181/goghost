@@ -9,6 +9,8 @@ final class Run {
     var focusAreas: [String]
     var goals: [String]
     var completedGoals: [String]
+    var streakFreezeCount: Int
+    var streakFreezeUsedDates: [Date]
     var startDate: Date
     var targetDays: Int
     var isActive: Bool
@@ -31,26 +33,29 @@ final class Run {
     var progressFraction: Double { Double(dayNumber) / Double(targetDays) }
 
     var currentStreak: Int {
-        let sorted = entries.sorted { $0.date > $1.date }
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: .now)
+        let freezeSet = Set(streakFreezeUsedDates.map { cal.startOfDay(for: $0) })
         var streak = 0
-        var expected = Calendar.current.startOfDay(for: .now)
+        var checkDay = today
 
-        for entry in sorted {
-            let entryDay = Calendar.current.startOfDay(for: entry.date)
-            let isToday = entryDay == expected
+        while streak <= 365 {
+            let isToday = checkDay == today
+            let dayEntry = entries.first(where: { cal.startOfDay(for: $0.date) == checkDay })
+            let hasCheckIn = isToday
+                ? dayEntry?.morningCheckInCompleted == true
+                : dayEntry?.nightCheckInCompleted == true
 
-            if entryDay == expected {
-                let counts = isToday ? entry.morningCheckInCompleted : entry.nightCheckInCompleted
-                if counts {
-                    streak += 1
-                    expected = Calendar.current.date(byAdding: .day, value: -1, to: expected)!
-                } else {
-                    break
-                }
-            } else if entryDay < expected {
+            if hasCheckIn || freezeSet.contains(checkDay) {
+                streak += 1
+            } else {
                 break
             }
+
+            guard let prev = cal.date(byAdding: .day, value: -1, to: checkDay) else { break }
+            checkDay = prev
         }
+
         return streak
     }
 
@@ -77,6 +82,8 @@ final class Run {
         self.focusAreas = focusAreas
         self.goals = goals
         self.completedGoals = []
+        self.streakFreezeCount = 1
+        self.streakFreezeUsedDates = []
         self.startDate = startDate
         self.targetDays = 90
         self.isActive = true
