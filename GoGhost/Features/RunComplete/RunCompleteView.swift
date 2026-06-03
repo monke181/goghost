@@ -8,6 +8,7 @@ struct RunCompleteView: View {
 
     @State private var page = 0
     @State private var confettiID = UUID()   // changing this re-spawns confetti
+    @State private var shareable: ShareableImage?
 
     private let totalCards = 6
     // Confetti fires on intro (0) and final summary (5) cards
@@ -50,6 +51,15 @@ struct RunCompleteView: View {
             if celebrationCards.contains(newPage) {
                 confettiID = UUID()
             }
+            renderShareable(for: newPage)
+        }
+        .onAppear { renderShareable(for: page) }
+    }
+
+    @MainActor
+    private func renderShareable(for index: Int) {
+        if let img = renderToImage(ShareCardWrapper(index: index, run: run)) {
+            shareable = ShareableImage(image: img, filename: "90dayrun-complete-\(index + 1).png")
         }
     }
 
@@ -68,12 +78,22 @@ struct RunCompleteView: View {
                         .foregroundStyle(GGColors.textTertiary)
                         .tightTracking()
                     Spacer()
-                    Button {
-                        shareCard(at: index)
-                    } label: {
+                    if let shareable {
+                        ShareLink(
+                            item: shareable,
+                            preview: SharePreview(
+                                "90 Day Run — Complete",
+                                image: Image(uiImage: shareable.image)
+                            )
+                        ) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(GGColors.textSecondary)
+                        }
+                    } else {
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 15, weight: .medium))
-                            .foregroundStyle(GGColors.textSecondary)
+                            .foregroundStyle(GGColors.textTertiary)
                     }
                 }
                 .padding(.horizontal, 32)
@@ -121,13 +141,6 @@ struct RunCompleteView: View {
         }
     }
 
-    // MARK: - Share
-
-    @MainActor
-    private func shareCard(at index: Int) {
-        guard let img = renderToImage(ShareCardWrapper(index: index, run: run)) else { return }
-        presentShareSheet(items: [img])
-    }
 }
 
 // MARK: - Share card wrapper (no chrome, full-bleed for IG)

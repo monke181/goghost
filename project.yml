@@ -33,6 +33,7 @@ targets:
           - UIInterfaceOrientationPortrait
         UILaunchScreen: {}
         NSUserNotificationUsageDescription: "GoGhost sends daily check-in reminders."
+        NSPhotoLibraryAddUsageDescription: "Save your run cards and weekly recaps to your photo library to share them."
         UIAppFonts:
           - BebasNeue-Regular.ttf
           - IBMPlexMono-Regular.otf

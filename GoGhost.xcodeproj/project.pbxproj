@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00A8B67AF6AF10A6DAC7F58D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55080AFCF67533F913969995 /* Assets.xcassets */; };
+		00AD90D27C2EDB7A3B1A646B /* ShareLinkUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56803C55EAE6D6363EB4CE21 /* ShareLinkUITest.swift */; };
 		05715201B782FA118DFBA358 /* WeeklyRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB15C0E0FEF486798A9DD43 /* WeeklyRecapView.swift */; };
 		0604610AE624E5B93D805E50 /* ShareHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B035DAC64CD87A98EB50D /* ShareHelper.swift */; };
 		085EE8380549395DE68B33C6 /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903164D416B66882E3410E6E /* CheckInViewModel.swift */; };
@@ -146,6 +147,7 @@
 		55080AFCF67533F913969995 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5582A3D2B1E4B35A59F19B96 /* ScreenTimeSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTimeSlide.swift; sourceTree = "<group>"; };
 		56446E7681F811308780F636 /* GhostModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostModeView.swift; sourceTree = "<group>"; };
+		56803C55EAE6D6363EB4CE21 /* ShareLinkUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareLinkUITest.swift; sourceTree = "<group>"; };
 		5864DE1D6AAFB5A4AF378479 /* IBMPlexMono-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Medium.otf"; sourceTree = "<group>"; };
 		5DD6C32B0A5E6A8B1C5E1D36 /* GoGhostWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoGhostWidget.swift; sourceTree = "<group>"; };
 		5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 			isa = PBXGroup;
 			children = (
 				2CB0A13577DBABEE2D6CAEF7 /* ConfettiUITest.swift */,
+				56803C55EAE6D6363EB4CE21 /* ShareLinkUITest.swift */,
 			);
 			path = GoGhostUITests;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8C67BE1E91A39280457C6E3 /* ConfettiUITest.swift in Sources */,
+				00AD90D27C2EDB7A3B1A646B /* ShareLinkUITest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

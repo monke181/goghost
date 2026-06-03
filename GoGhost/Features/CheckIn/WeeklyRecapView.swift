@@ -28,6 +28,7 @@ struct WeeklyRecapView: View {
     let onDone: () -> Void
 
     @State private var showConfetti = false
+    @State private var shareable: ShareableImage?
 
     var body: some View {
         ZStack {
@@ -56,20 +57,20 @@ struct WeeklyRecapView: View {
 
                         // Actions
                         VStack(spacing: 12) {
-                            Button { shareCard() } label: {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "square.and.arrow.up")
-                                        .font(.system(size: 12, weight: .medium))
-                                    Text("SHARE THIS WEEK")
-                                        .font(GGFonts.label)
-                                        .tightTracking()
+                            if let shareable {
+                                ShareLink(
+                                    item: shareable,
+                                    preview: SharePreview(
+                                        "Week \(summary.weekNumber) Wrapped",
+                                        image: Image(uiImage: shareable.image)
+                                    )
+                                ) {
+                                    shareLabel
                                 }
-                                .foregroundStyle(GGColors.textPrimary)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 18)
-                                .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
+                                .buttonStyle(.plain)
+                            } else {
+                                shareLabel.opacity(0.4)
                             }
-                            .buttonStyle(.plain)
 
                             GGPrimaryButton(title: "DONE", action: onDone)
                         }
@@ -89,15 +90,25 @@ struct WeeklyRecapView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 withAnimation { showConfetti = true }
             }
+            // Pre-render the share image so ShareLink has it ready.
+            if shareable == nil, let img = renderToImage(WeeklyShareCard(summary: summary)) {
+                shareable = ShareableImage(image: img, filename: "90dayrun-week-\(summary.weekNumber).png")
+            }
         }
     }
 
-    // MARK: - Share
-
-    @MainActor
-    private func shareCard() {
-        guard let img = renderToImage(WeeklyShareCard(summary: summary)) else { return }
-        presentShareSheet(items: [img])
+    private var shareLabel: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 12, weight: .medium))
+            Text("SHARE THIS WEEK")
+                .font(GGFonts.label)
+                .tightTracking()
+        }
+        .foregroundStyle(GGColors.textPrimary)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 18)
+        .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
     }
 }
 

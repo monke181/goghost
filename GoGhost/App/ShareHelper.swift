@@ -1,5 +1,7 @@
 import SwiftUI
 import UIKit
+import CoreTransferable
+import UniformTypeIdentifiers
 
 // MARK: - Image rendering
 
@@ -22,27 +24,19 @@ func renderToImage<Content: View>(_ content: Content, width: CGFloat = 393, heig
     return renderer.uiImage
 }
 
-// MARK: - Share sheet presentation
+// MARK: - Transferable share image
 
-func presentShareSheet(items: [Any]) {
-    DispatchQueue.main.async {
-        guard
-            let windowScene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-            let window = windowScene.windows.first(where: { $0.isKeyWindow }),
-            let root = window.rootViewController
-        else { return }
+/// A PNG-backed image that works with the native SwiftUI `ShareLink`.
+/// Exports as a real .png file so every destination (Save Image, Photos, Messages,
+/// AirDrop, Instagram, etc.) treats it as a shareable picture — not the app itself.
+struct ShareableImage: Transferable {
+    let image: UIImage
+    let filename: String
 
-        var top = root
-        while let presented = top.presentedViewController { top = presented }
-
-        let avc = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        if let popover = avc.popoverPresentationController {
-            popover.sourceView = top.view
-            popover.sourceRect = CGRect(x: top.view.bounds.midX, y: top.view.bounds.midY, width: 0, height: 0)
-            popover.permittedArrowDirections = []
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .png) { shareable in
+            shareable.image.pngData() ?? Data()
         }
-        top.present(avc, animated: true)
+        .suggestedFileName { $0.filename }
     }
 }
