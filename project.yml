@@ -28,7 +28,7 @@ targets:
     info:
       path: GoGhost/Info.plist
       properties:
-        CFBundleDisplayName: GoGhost
+        CFBundleDisplayName: 90DayRun
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UILaunchScreen: {}

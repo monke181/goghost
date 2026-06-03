@@ -3,12 +3,18 @@ import SwiftUI
 struct GGBottomNav: View {
     @Binding var selectedTab: AppTab
 
-    private let tabs: [(tab: AppTab, label: String)] = [
-        (.dashboard, "HOME"),
-        (.ghostMode, "GHOST"),
-        (.log,       "LOG"),
-        (.settings,  "CONFIG")
-    ]
+    private var tabs: [(tab: AppTab, label: String)] {
+        var t: [(tab: AppTab, label: String)] = [
+            (.dashboard, "HOME"),
+            (.ghostMode, "GHOST"),
+            (.log,       "LOG"),
+            (.settings,  "CONFIG")
+        ]
+        #if DEBUG
+        t.append((.debug, "DEV"))
+        #endif
+        return t
+    }
 
     var body: some View {
         VStack(spacing: 0) {

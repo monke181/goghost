@@ -360,7 +360,7 @@ struct NightCheckInView: View {
 
 }
 
-private struct ScoreRevealView: View {
+struct ScoreRevealView: View {
     let score: Int
     let streak: Int
     let freezeJustUsed: Bool

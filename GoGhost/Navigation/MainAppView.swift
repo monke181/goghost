@@ -5,6 +5,9 @@ enum AppTab {
     case ghostMode
     case log
     case settings
+    #if DEBUG
+    case debug
+    #endif
 }
 
 struct MainAppView: View {
@@ -23,6 +26,10 @@ struct MainAppView: View {
                     NavigationStack { LogView() }
                 case .settings:
                     NavigationStack { SettingsView() }
+                #if DEBUG
+                case .debug:
+                    NavigationStack { DebugView() }
+                #endif
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

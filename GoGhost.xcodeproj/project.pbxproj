@@ -61,6 +61,7 @@
 		D595464AA3DFFF11A4E352BA /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E120A6B26E4F26F7DCC0FE4 /* BebasNeue-Regular.ttf */; };
 		D94DF04D6038C49077530EAD /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19014FECB783B41AEC839598 /* OnboardingViewModel.swift */; };
 		DA49D6076366FCCCC2AB04D0 /* GhostModeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54878320BB95DAD811222EC8 /* GhostModeViewModel.swift */; };
+		DA720A2D49607E95CB4F5C4C /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA357043B06FAA9B714A92E /* DebugView.swift */; };
 		DC2985543E92EE76833A9EB3 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DC761C84B133E0D01FF9EA /* ScreenTimeManager.swift */; };
 		DF5ADEF52ABBC45B5BC50D63 /* RunCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB00AFA130936E1592EC9334 /* RunCompleteView.swift */; };
 		ED8931084B617247FCC9A070 /* SystemSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1457C898080F9FA998276 /* SystemSlide.swift */; };
@@ -111,6 +112,7 @@
 		18074256E154AFB62F302994 /* GoGhost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoGhost.entitlements; sourceTree = "<group>"; };
 		19014FECB783B41AEC839598 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		1925D657CBC92473802A466C /* FocusArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusArea.swift; sourceTree = "<group>"; };
+		1AA357043B06FAA9B714A92E /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		1E21FB024A46754423D6F929 /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
 		23B5781A27EE37A5666A2D51 /* CommitSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitSlide.swift; sourceTree = "<group>"; };
 		24614937A600DFF1E2F8B5BB /* GoGhostTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoGhostTests.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 			children = (
 				9A472CCCD17D10EFADBC0E9E /* CheckIn */,
 				A5E1EF1FE8D7C68C5DFFA1B3 /* Dashboard */,
+				9B416A07C92B9FE37188E1D7 /* Debug */,
 				6D4A8DFBDD259C50AC74CEEC /* GhostMode */,
 				8639EB1084E6FC084F489762 /* Log */,
 				F80A0ADEC36E91D107DA658B /* Onboarding */,
@@ -351,6 +354,14 @@
 				A671D1D4BC19F5D1A8D6E8BA /* NightCheckInView.swift */,
 			);
 			path = CheckIn;
+			sourceTree = "<group>";
+		};
+		9B416A07C92B9FE37188E1D7 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				1AA357043B06FAA9B714A92E /* DebugView.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		A5E1EF1FE8D7C68C5DFFA1B3 /* Dashboard */ = {
@@ -594,6 +605,7 @@
 				A29A27ECB8502C5917D11B25 /* CommitSlide.swift in Sources */,
 				5F30E942ADB71F42A349F4E5 /* DailyEntry.swift in Sources */,
 				33936491A0C4B38427B50762 /* DashboardView.swift in Sources */,
+				DA720A2D49607E95CB4F5C4C /* DebugView.swift in Sources */,
 				7CB5ECDF77CDC4930F245EFE /* FlowLayout.swift in Sources */,
 				CC7E46DFB4FBFD136D420399 /* FocusArea.swift in Sources */,
 				F8E53AF252974586499598CC /* FocusAreasSlide.swift in Sources */,

@@ -5,6 +5,8 @@ struct OnboardingContainerView: View {
     @State private var vm = OnboardingViewModel()
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @Environment(\.modelContext) private var context
+    @Environment(SubscriptionManager.self) private var subscriptions
+    @State private var showPaywall = false
 
     var body: some View {
         ZStack {
@@ -75,8 +77,15 @@ struct OnboardingContainerView: View {
                 ScreenTimeSlide(onContinue: vm.advance)
             case .launch:
                 LaunchSlide(why: vm.why, focusAreas: Array(vm.selectedAreas)) {
-                    vm.commitRun(context: context)
-                    hasCompletedOnboarding = true
+                    // Already subscribed (returning user) — commit and enter immediately.
+                    // Otherwise gate behind the paywall; hasCompletedOnboarding is set
+                    // once SubscriptionManager confirms the purchase.
+                    if subscriptions.isSubscribed {
+                        vm.commitRun(context: context)
+                        hasCompletedOnboarding = true
+                    } else {
+                        showPaywall = true
+                    }
                 }
             }
         }
@@ -85,5 +94,14 @@ struct OnboardingContainerView: View {
             insertion: .move(edge: vm.direction >= 0 ? .trailing : .leading),
             removal: .move(edge: vm.direction >= 0 ? .leading : .trailing)
         ))
+        .fullScreenCover(isPresented: $showPaywall) {
+            PaywallView()
+        }
+        .onChange(of: subscriptions.isSubscribed) { _, subscribed in
+            if subscribed && showPaywall {
+                vm.commitRun(context: context)
+                hasCompletedOnboarding = true
+            }
+        }
     }
 }
