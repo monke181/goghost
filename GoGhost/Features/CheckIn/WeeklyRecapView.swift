@@ -126,7 +126,7 @@ struct WeeklyRecapCard: View {
                     .foregroundStyle(GGColors.textTertiary)
                     .tightTracking()
 
-                Text("WRAPPED.")
+                Text("RECAP.")
                     .font(GGFonts.display)
                     .foregroundStyle(GGColors.textPrimary)
 

@@ -551,6 +551,8 @@ struct DebugView: View {
 
     private func seedScreenshotData() {
         for r in runs { context.delete(r) }
+        let existingJournal = (try? context.fetch(FetchDescriptor<JournalEntry>())) ?? []
+        for j in existingJournal { context.delete(j) }
         try? context.save()
 
         let cal = Calendar.current
@@ -724,6 +726,52 @@ struct DebugView: View {
 
         // Streak: days 21-46 nights (26 days) + today morning = 27
         run.allTimeBestStreak = 27
+
+        // Journal entries — spread across the run
+        let journalEntries: [(daysAgo: Int, text: String)] = [
+            (46, """
+            Day 1. Writing it down makes it real.
+            Put it in writing today: 90 days, no excuses. I've started things like this before and quit. This time feels different — the why is clear. I'm tired of being the person who almost does things. Starting now.
+            """),
+            (39, """
+            The resistance is louder on rest days.
+            Week 1 done. The hardest part isn't the work — it's the voice that shows up when I stop moving and says "you can skip tomorrow." Learning to ignore it. That's the whole game.
+            """),
+            (33, """
+            Something shifted today.
+            Woke up and didn't check my phone for two hours. Two hours. That's never happened. Didn't plan it — just started working and forgot. That's what I'm chasing. That version of me.
+            """),
+            (27, """
+            Hard day. Still showed up.
+            Everything went sideways by noon. Meeting ran long, gym got skipped, I almost bailed on the night check-in. Did it anyway. Scored low but kept the streak. That matters more than the number.
+            """),
+            (21, """
+            Three weeks in.
+            I don't recognize the last version of me. Not in a dramatic way — just quietly, the habits are different. I go to bed earlier. I start earlier. The phone stays down longer. Small things. Stacking.
+            """),
+            (14, """
+            The streak is the anchor.
+            Day 33. I almost broke it last Thursday. Chose not to. Now every day I don't break it makes the next day easier. The streak is doing more work than I am at this point.
+            """),
+            (8, """
+            Locked in for 90 minutes today.
+            No interruptions. No phone. Just the work. This is the state I've been building toward — where the outside world goes quiet and it's just me and the problem. It's happening more often now.
+            """),
+            (3, """
+            Momentum is a real thing.
+            I get it now. The first three weeks were a fight every single day. Now the fight is smaller. It's not that the work got easier — I got more of whatever it is that does the work. More of that.
+            """),
+            (0, """
+            Day 47.
+            Halfway isn't the right frame. Halfway implies coasting to the finish. There's no coasting. But 47 days of proof that I can show up — that's worth writing down. Keep going.
+            """),
+        ]
+
+        for (daysAgo, rawText) in journalEntries {
+            let date = cal.date(byAdding: .day, value: -daysAgo, to: today)!
+            let entry = JournalEntry(date: date, text: rawText.trimmingCharacters(in: .whitespacesAndNewlines))
+            context.insert(entry)
+        }
 
         try? context.save()
         WidgetDataStore.write(from: run)
