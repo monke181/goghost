@@ -88,12 +88,46 @@ struct ProgressSectionView: View {
 
     // MARK: - Score chart
 
+    @State private var selectedDay: Int?
+
     private var scoreChart: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("DISCIPLINE OVER TIME")
                 .font(GGFonts.label)
                 .foregroundStyle(GGColors.textTertiary)
                 .tightTracking()
+
+            // Selected day callout — sits between title and chart
+            if let day = selectedDay, let entry = closestEntry(to: day) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("DAY \(entry.dayNumber)  ·  \(entry.date.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day()).uppercased())")
+                            .font(GGFonts.label)
+                            .foregroundStyle(GGColors.textTertiary)
+                            .tightTracking()
+                        Text("\(entry.disciplineScore)")
+                            .font(GGFonts.counterSmall)
+                            .foregroundStyle(pointColor(entry.disciplineScore))
+                    }
+                    Spacer()
+                    if entry.totalFocusMinutes > 0 {
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("\(entry.totalFocusMinutes)M")
+                                .font(GGFonts.bodyMed)
+                                .foregroundStyle(GGColors.textPrimary)
+                            Text("FOCUS")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textTertiary)
+                                .tightTracking()
+                        }
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(GGColors.surface)
+                .overlay(Rectangle().stroke(GGColors.border, lineWidth: 1))
+                .transition(.opacity.combined(with: .scale(scale: 0.97, anchor: .top)))
+            }
 
             Chart {
                 // Soft green zone above 80
@@ -139,7 +173,22 @@ struct ProgressSectionView: View {
                 RuleMark(y: .value("80", 80))
                     .foregroundStyle(GGColors.border)
                     .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 4]))
+
+                // Selection indicator
+                if let day = selectedDay, let entry = closestEntry(to: day) {
+                    RuleMark(x: .value("Selected", entry.dayNumber))
+                        .foregroundStyle(GGColors.textSecondary.opacity(0.4))
+                        .lineStyle(StrokeStyle(lineWidth: 1))
+
+                    PointMark(
+                        x: .value("Day",   entry.dayNumber),
+                        y: .value("Score", entry.disciplineScore)
+                    )
+                    .foregroundStyle(GGColors.textPrimary)
+                    .symbolSize(60)
+                }
             }
+            .chartXSelection(value: $selectedDay)
             .frame(height: 200)
             .chartYScale(domain: 0...100)
             .chartXScale(domain: 1...90)
@@ -185,5 +234,9 @@ struct ProgressSectionView: View {
         if s >= 80 { return GGColors.accent }
         if s >= 50 { return GGColors.textPrimary }
         return GGColors.danger
+    }
+
+    private func closestEntry(to day: Int) -> DailyEntry? {
+        entries.min(by: { abs($0.dayNumber - day) < abs($1.dayNumber - day) })
     }
 }

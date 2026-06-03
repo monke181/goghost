@@ -8,7 +8,7 @@ struct NightCheckInView: View {
     @State private var vm = CheckInViewModel(mode: .night)
     @State private var freezeJustUsed = false
     @State private var isNewBestScore = false
-    @State private var isSunday: Bool = Calendar.current.component(.weekday, from: .now) == 1
+    @State private var weekSummary: WeekSummary?
 
     private var todayEntry: DailyEntry? {
         let today = Calendar.current.startOfDay(for: .now)
@@ -248,6 +248,9 @@ struct NightCheckInView: View {
                     try? context.save()
                 }
                 WidgetDataStore.write(from: run)
+                if Calendar.current.component(.weekday, from: .now) == 1 {
+                    weekSummary = buildWeekSummary()
+                }
                 vm.advance()
             }
         }
@@ -259,9 +262,38 @@ struct NightCheckInView: View {
             streak: run.currentStreak,
             freezeJustUsed: freezeJustUsed,
             isNewBestScore: isNewBestScore,
-            weekAvg: isSunday ? run.last7DayAvgScore : nil,
-            weekNumber: isSunday ? run.weekNumber : nil,
+            weekSummary: weekSummary,
             onDone: { dismiss() }
+        )
+    }
+
+    private func buildWeekSummary() -> WeekSummary {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: .now)
+        let weekdayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+
+        let cells: [WeekSummary.DayCell] = (0..<7).map { offset in
+            let date = cal.date(byAdding: .day, value: -(6 - offset), to: today)!
+            let entry = run.entries.first(where: { cal.startOfDay(for: $0.date) == date })
+            let score = entry?.nightCheckInCompleted == true ? entry!.disciplineScore : 0
+            let focus = entry?.totalFocusMinutes ?? 0
+            let wd = weekdayNames[cal.component(.weekday, from: date) - 1]
+            return WeekSummary.DayCell(weekday: wd, date: date, score: score, focusMinutes: focus)
+        }
+
+        let scored = cells.map(\.score).filter { $0 > 0 }
+        let totalFocus = cells.reduce(0) { $0 + $1.focusMinutes }
+        let weekStart = cal.date(byAdding: .day, value: -6, to: today)!
+
+        return WeekSummary(
+            weekNumber:        run.weekNumber,
+            startDate:         weekStart,
+            endDate:           today,
+            dayCells:          cells,
+            avgScore:          scored.isEmpty ? 0 : scored.reduce(0, +) / scored.count,
+            bestScore:         scored.max() ?? 0,
+            totalFocusMinutes: totalFocus,
+            completedDays:     scored.count
         )
     }
 
@@ -365,14 +397,14 @@ struct ScoreRevealView: View {
     let streak: Int
     let freezeJustUsed: Bool
     let isNewBestScore: Bool
-    let weekAvg: Int?
-    let weekNumber: Int?
+    let weekSummary: WeekSummary?
     let onDone: () -> Void
 
     @State private var displayScore = 0
     @State private var showMeta = false
     @State private var showButton = false
     @State private var showConfetti = false
+    @State private var showWeekRecap = false
 
     private var shouldCelebrate: Bool {
         score >= 80 || isNewBestScore || milestoneLabel(streak) != nil
@@ -441,15 +473,11 @@ struct ScoreRevealView: View {
                                 .foregroundStyle(GGColors.accent)
                         }
 
-                        if let weekAvg, let weekNumber {
+                        if weekSummary != nil {
                             Rectangle().fill(GGColors.border).frame(height: 1)
-                            Text("WEEK \(weekNumber) COMPLETE")
+                            Text("SUNDAY WRAP READY.")
                                 .font(GGFonts.label)
                                 .foregroundStyle(GGColors.textTertiary)
-                                .tightTracking()
-                            Text("WEEK AVG: \(weekAvg)")
-                                .font(GGFonts.bodyMed)
-                                .foregroundStyle(weekAvg >= 70 ? GGColors.accent : GGColors.textPrimary)
                                 .tightTracking()
                         }
                     }
@@ -461,12 +489,34 @@ struct ScoreRevealView: View {
             Spacer()
 
             if showButton {
-                GGPrimaryButton(title: buttonLabel(score), action: onDone)
-                    .padding(.horizontal, 32)
-                    .padding(.bottom, 56)
-                    .transition(.opacity)
+                VStack(spacing: 12) {
+                    GGPrimaryButton(title: buttonLabel(score), action: onDone)
+
+                    if weekSummary != nil {
+                        Button {
+                            showWeekRecap = true
+                        } label: {
+                            Text("VIEW THIS WEEK  →")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.accent)
+                                .tightTracking()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, 32)
+                .padding(.bottom, 56)
+                .transition(.opacity)
             } else {
                 Color.clear.frame(height: 110)
+            }
+        }
+        .fullScreenCover(isPresented: $showWeekRecap) {
+            if let ws = weekSummary {
+                WeeklyRecapView(summary: ws) {
+                    showWeekRecap = false
+                    onDone()
+                }
             }
         }
         .task {

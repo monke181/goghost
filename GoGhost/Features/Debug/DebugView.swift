@@ -11,15 +11,16 @@ private struct Preview: Identifiable {
     let kind: Kind
 
     enum Kind {
-        case scoreReveal(score: Int, streak: Int, freezeUsed: Bool, newBest: Bool, weekAvg: Int?, weekNum: Int?)
+        case scoreReveal(score: Int, streak: Int, freezeUsed: Bool, newBest: Bool, showWeekRecap: Bool)
+        case weekRecap
         case runComplete
         case paywall
     }
 
     static func scoreReveal(score: Int, streak: Int = 0, freezeUsed: Bool = false,
-                             newBest: Bool = false, weekAvg: Int? = nil, weekNum: Int? = nil) -> Preview {
+                             newBest: Bool = false, showWeekRecap: Bool = false) -> Preview {
         Preview(kind: .scoreReveal(score: score, streak: streak, freezeUsed: freezeUsed,
-                                   newBest: newBest, weekAvg: weekAvg, weekNum: weekNum))
+                                   newBest: newBest, showWeekRecap: showWeekRecap))
     }
 }
 
@@ -81,11 +82,16 @@ struct DebugView: View {
                     row("Score 85 — 30-day milestone") {
                         preview = .scoreReveal(score: 85, streak: 30)
                     }
-                    row("Score 78 — Sunday recap week 3 (avg 74)") {
-                        preview = .scoreReveal(score: 78, streak: 6, weekAvg: 74, weekNum: 3)
+                    row("Score 78 — Sunday recap (shows VIEW THIS WEEK button)") {
+                        preview = .scoreReveal(score: 78, streak: 6, showWeekRecap: true)
                     }
                     row("Score 87 — Sunday + 7-day milestone + new best") {
-                        preview = .scoreReveal(score: 87, streak: 7, newBest: true, weekAvg: 82, weekNum: 1)
+                        preview = .scoreReveal(score: 87, streak: 7, newBest: true, showWeekRecap: true)
+                    }
+
+                    section("WEEKLY RECAP")
+                    row("Show weekly recap (mock data)") {
+                        preview = Preview(kind: .weekRecap)
                     }
 
                     // MARK: Run Complete
@@ -294,7 +300,7 @@ struct DebugView: View {
         .navigationBarHidden(true)
         .fullScreenCover(item: $preview) { p in
             switch p.kind {
-            case let .scoreReveal(score, streak, freezeUsed, newBest, weekAvg, weekNum):
+            case let .scoreReveal(score, streak, freezeUsed, newBest, showWeekRecap):
                 ZStack {
                     GGColors.background.ignoresSafeArea()
                     ScoreRevealView(
@@ -302,11 +308,13 @@ struct DebugView: View {
                         streak: streak,
                         freezeJustUsed: freezeUsed,
                         isNewBestScore: newBest,
-                        weekAvg: weekAvg,
-                        weekNumber: weekNum,
+                        weekSummary: showWeekRecap ? mockWeekSummary() : nil,
                         onDone: { preview = nil }
                     )
                 }
+
+            case .weekRecap:
+                WeeklyRecapView(summary: mockWeekSummary()) { preview = nil }
 
             case .runComplete:
                 if let run {
@@ -375,6 +383,31 @@ struct DebugView: View {
         .overlay(alignment: .bottom) {
             Rectangle().fill(GGColors.border).frame(height: 1).padding(.horizontal, 24)
         }
+    }
+
+    // MARK: - Mock week summary
+
+    private func mockWeekSummary() -> WeekSummary {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: .now)
+        let names = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+        let scores = [85, 72, 0, 90, 65, 88, 78]
+        let focus  = [60, 45, 0, 90, 30, 75, 50]
+        let cells = (0..<7).map { i in
+            let date = cal.date(byAdding: .day, value: -(6 - i), to: today)!
+            return WeekSummary.DayCell(weekday: names[i], date: date, score: scores[i], focusMinutes: focus[i])
+        }
+        let scored = scores.filter { $0 > 0 }
+        return WeekSummary(
+            weekNumber: 3,
+            startDate: cal.date(byAdding: .day, value: -6, to: today)!,
+            endDate: today,
+            dayCells: cells,
+            avgScore: scored.reduce(0, +) / scored.count,
+            bestScore: scored.max()!,
+            totalFocusMinutes: focus.reduce(0, +),
+            completedDays: scored.count
+        )
     }
 
     // MARK: - Notification tester

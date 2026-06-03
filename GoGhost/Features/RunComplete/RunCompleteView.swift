@@ -7,8 +7,6 @@ struct RunCompleteView: View {
     let onClose: () -> Void
 
     @State private var page = 0
-    @State private var shareImage: UIImage?
-    @State private var showShare = false
     @State private var confettiID = UUID()   // changing this re-spawns confetti
 
     private let totalCards = 6
@@ -50,12 +48,7 @@ struct RunCompleteView: View {
         }
         .onChange(of: page) { _, newPage in
             if celebrationCards.contains(newPage) {
-                confettiID = UUID()   // fresh confetti each time they land on a celebration card
-            }
-        }
-        .sheet(isPresented: $showShare) {
-            if let img = shareImage {
-                ShareSheet(items: [img])
+                confettiID = UUID()
             }
         }
     }
@@ -76,9 +69,8 @@ struct RunCompleteView: View {
                         .tightTracking()
                     Spacer()
                     Button {
-                        Task { @MainActor in
-                            shareImage = renderShareCard(index: index)
-                            showShare = true
+                        if let img = renderShareCard(index: index) {
+                            presentShareSheet(image: img)
                         }
                     } label: {
                         Image(systemName: "square.and.arrow.up")
@@ -131,15 +123,30 @@ struct RunCompleteView: View {
         }
     }
 
-    // MARK: - ImageRenderer export
+    // MARK: - Share
 
     @MainActor
     private func renderShareCard(index: Int) -> UIImage? {
-        let card = ShareCardWrapper(index: index, run: run)
-            .frame(width: 393, height: 852)
-        let renderer = ImageRenderer(content: card)
-        renderer.scale = 3.0
+        let renderer = ImageRenderer(
+            content: ShareCardWrapper(index: index, run: run)
+                .frame(width: 393, height: 852)
+                .environment(\.colorScheme, .dark)
+        )
+        renderer.scale = UIScreen.main.scale
         return renderer.uiImage
+    }
+
+    private func presentShareSheet(image: UIImage) {
+        let avc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let root = scene.windows.first?.rootViewController else { return }
+        var top = root
+        while let presented = top.presentedViewController { top = presented }
+        avc.popoverPresentationController?.sourceView = top.view
+        avc.popoverPresentationController?.sourceRect = CGRect(
+            x: top.view.bounds.midX, y: top.view.bounds.midY, width: 0, height: 0
+        )
+        top.present(avc, animated: true)
     }
 }
 
@@ -426,14 +433,3 @@ struct SummaryCardContent: View {
     }
 }
 
-// MARK: - Share sheet
-
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}

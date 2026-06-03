@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00A8B67AF6AF10A6DAC7F58D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55080AFCF67533F913969995 /* Assets.xcassets */; };
+		05715201B782FA118DFBA358 /* WeeklyRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB15C0E0FEF486798A9DD43 /* WeeklyRecapView.swift */; };
 		085EE8380549395DE68B33C6 /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 903164D416B66882E3410E6E /* CheckInViewModel.swift */; };
 		09A9293D847CC4B7075864F9 /* GoGhostWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD6C32B0A5E6A8B1C5E1D36 /* GoGhostWidget.swift */; };
 		1AAA0DBD6BE7A66EDD9C2106 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA68FB3A13C44E1698B467FE /* JournalEntry.swift */; };
@@ -170,6 +171,7 @@
 		CE54CA43F912E715188865C4 /* GoalsSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsSlide.swift; sourceTree = "<group>"; };
 		D3D4AA063A2AF71FF188C129 /* GGCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGCard.swift; sourceTree = "<group>"; };
 		D9E5B5A74C3DC7B4E70D7DA9 /* DailyEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEntry.swift; sourceTree = "<group>"; };
+		DFB15C0E0FEF486798A9DD43 /* WeeklyRecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyRecapView.swift; sourceTree = "<group>"; };
 		E20E4AFFB1962EDDF2B8A8E7 /* GGTimerDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGTimerDisplay.swift; sourceTree = "<group>"; };
 		EA68FB3A13C44E1698B467FE /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		EEF73A8439094436D594DE8B /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				903164D416B66882E3410E6E /* CheckInViewModel.swift */,
 				AA5AE2DFBFE5472B886CFFFB /* MorningCheckInView.swift */,
 				A671D1D4BC19F5D1A8D6E8BA /* NightCheckInView.swift */,
+				DFB15C0E0FEF486798A9DD43 /* WeeklyRecapView.swift */,
 			);
 			path = CheckIn;
 			sourceTree = "<group>";
@@ -651,6 +654,7 @@
 				1D528EFD673C4EBFA6009724 /* SettingsViewModel.swift in Sources */,
 				1BA695412B928F1756DF5436 /* SubscriptionManager.swift in Sources */,
 				ED8931084B617247FCC9A070 /* SystemSlide.swift in Sources */,
+				05715201B782FA118DFBA358 /* WeeklyRecapView.swift in Sources */,
 				37D42E06B12E7462E61F3C21 /* WelcomeSlide.swift in Sources */,
 				31D8DB773BF208071B80E36D /* WhySlide.swift in Sources */,
 				2DAF9CCA7611AEB9E4B464C4 /* WidgetDataStore.swift in Sources */,
