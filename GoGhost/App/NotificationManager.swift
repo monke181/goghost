@@ -34,9 +34,16 @@ final class NotificationManager {
                 ? ud.integer(forKey: AppStorageKeys.morningReminderHour) : 7
             let mm = ud.integer(forKey: AppStorageKeys.morningReminderMinute)
 
+            let morningBodies = [
+                "The version of you that skips this is losing ground.",
+                "Lock in before the day locks you out.",
+                "Ghosts don't sleep in.",
+                "Set the tone. Start the day right.",
+                "Every day you skip, someone else gains ground."
+            ]
             let morning = UNMutableNotificationContent()
-            morning.title = "Morning Check-In"
-            morning.body = "Set your intentions. Lock in for the day."
+            morning.title = "MORNING CHECK-IN"
+            morning.body = morningBodies.randomElement() ?? "Set your intentions. Lock in."
             morning.sound = .default
 
             var morningTime = DateComponents()
@@ -54,9 +61,16 @@ final class NotificationManager {
                 ? ud.integer(forKey: AppStorageKeys.nightReminderHour) : 21
             let nm = ud.integer(forKey: AppStorageKeys.nightReminderMinute)
 
+            let nightBodies = [
+                "The streak doesn't count itself. Reflect.",
+                "Cap the day. What did you do with it?",
+                "Ghosts don't take days off.",
+                "Don't let today slip by unaccounted for.",
+                "Close the loop. Your future self is watching."
+            ]
             let night = UNMutableNotificationContent()
-            night.title = "Night Reflection"
-            night.body = "How did the day go? Time to reflect."
+            night.title = "NIGHT REFLECTION"
+            night.body = nightBodies.randomElement() ?? "Cap the day. What did you do with it?"
             night.sound = .default
 
             var nightTime = DateComponents()

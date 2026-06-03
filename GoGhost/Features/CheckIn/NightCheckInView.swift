@@ -7,6 +7,8 @@ struct NightCheckInView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var vm = CheckInViewModel(mode: .night)
     @State private var freezeJustUsed = false
+    @State private var isNewBestScore = false
+    @State private var isSunday: Bool = Calendar.current.component(.weekday, from: .now) == 1
 
     private var todayEntry: DailyEntry? {
         let today = Calendar.current.startOfDay(for: .now)
@@ -234,10 +236,18 @@ struct NightCheckInView: View {
             }
         } action: {
             GGPrimaryButton(title: "SUBMIT") {
+                let previousBestScore = run.allTimeBestScore
+                let previousBestStreak = run.allTimeBestStreak
                 let entry = GoGhost.todayEntry(for: run, context: context)
                 vm.save(to: entry, context: context)
+                isNewBestScore = vm.computedScore > previousBestScore
                 autoApplyFreeze()
                 grantFreezeForMilestone()
+                if run.currentStreak > previousBestStreak {
+                    run.allTimeBestStreak = run.currentStreak
+                    try? context.save()
+                }
+                WidgetDataStore.write(from: run)
                 vm.advance()
             }
         }
@@ -248,6 +258,9 @@ struct NightCheckInView: View {
             score: vm.computedScore,
             streak: run.currentStreak,
             freezeJustUsed: freezeJustUsed,
+            isNewBestScore: isNewBestScore,
+            weekAvg: isSunday ? run.last7DayAvgScore : nil,
+            weekNumber: isSunday ? run.weekNumber : nil,
             onDone: { dismiss() }
         )
     }
@@ -351,6 +364,9 @@ private struct ScoreRevealView: View {
     let score: Int
     let streak: Int
     let freezeJustUsed: Bool
+    let isNewBestScore: Bool
+    let weekAvg: Int?
+    let weekNumber: Int?
     let onDone: () -> Void
 
     @State private var displayScore = 0
@@ -362,10 +378,18 @@ private struct ScoreRevealView: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 16) {
-                Text("DISCIPLINE SCORE")
-                    .font(GGFonts.label)
-                    .foregroundStyle(GGColors.textTertiary)
-                    .tightTracking()
+                HStack(spacing: 10) {
+                    Text("DISCIPLINE SCORE")
+                        .font(GGFonts.label)
+                        .foregroundStyle(GGColors.textTertiary)
+                        .tightTracking()
+                    if isNewBestScore {
+                        Text("NEW BEST")
+                            .font(GGFonts.label)
+                            .foregroundStyle(GGColors.accent)
+                            .tightTracking()
+                    }
+                }
 
                 Text("\(displayScore)")
                     .font(GGFonts.hero)
@@ -399,6 +423,18 @@ private struct ScoreRevealView: View {
                             Text(label)
                                 .font(GGFonts.headline)
                                 .foregroundStyle(GGColors.accent)
+                        }
+
+                        if let weekAvg, let weekNumber {
+                            Rectangle().fill(GGColors.border).frame(height: 1)
+                            Text("WEEK \(weekNumber) COMPLETE")
+                                .font(GGFonts.label)
+                                .foregroundStyle(GGColors.textTertiary)
+                                .tightTracking()
+                            Text("WEEK AVG: \(weekAvg)")
+                                .font(GGFonts.bodyMed)
+                                .foregroundStyle(weekAvg >= 70 ? GGColors.accent : GGColors.textPrimary)
+                                .tightTracking()
                         }
                     }
                     .transition(.opacity.combined(with: .move(edge: .bottom)))

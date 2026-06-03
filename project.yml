@@ -54,6 +54,29 @@ targets:
       - sdk: FamilyControls.framework
       - sdk: ManagedSettings.framework
       - package: RevenueCat
+      - target: GoGhostWidget
+        embed: true
+
+  GoGhostWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: GoGhostWidget
+    info:
+      path: GoGhostWidget/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.hxndrd.goghost.widget
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_FILE: GoGhostWidget/Info.plist
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_ENTITLEMENTS: GoGhostWidget/GoGhostWidget.entitlements
+    dependencies:
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
 
   GoGhostTests:
     type: bundle.unit-test

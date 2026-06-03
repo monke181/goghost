@@ -7,6 +7,7 @@ struct DashboardView: View {
 
     @State private var showMorning = false
     @State private var showNight = false
+    @State private var showRunComplete = false
 
     private var run: Run? { runs.first }
 
@@ -50,8 +51,8 @@ struct DashboardView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 20)
 
-                        // Streak
-                        HStack {
+                        // Streak + Ghost Level
+                        HStack(alignment: .top) {
                             Spacer()
                             VStack(spacing: 4) {
                                 Text(run.currentStreak > 0 ? "\(run.currentStreak) DAY STREAK" : "NO STREAK")
@@ -64,8 +65,29 @@ struct DashboardView: View {
                                         .foregroundStyle(GGColors.textTertiary)
                                         .tightTracking()
                                 }
+                                if run.allTimeBestStreak > run.currentStreak && run.allTimeBestStreak > 0 {
+                                    Text("BEST: \(run.allTimeBestStreak)")
+                                        .font(GGFonts.caption)
+                                        .foregroundStyle(GGColors.textTertiary)
+                                        .tightTracking()
+                                }
                             }
                             Spacer()
+                        }
+                        .overlay(alignment: .trailing) {
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text(run.ghostLevel.rawValue)
+                                    .font(GGFonts.label)
+                                    .foregroundStyle(GGColors.textPrimary)
+                                    .tightTracking()
+                                if run.isCleanWeek {
+                                    Text("CLEAN WEEK")
+                                        .font(GGFonts.caption)
+                                        .foregroundStyle(GGColors.accent)
+                                        .tightTracking()
+                                }
+                            }
+                            .padding(.trailing, 24)
                         }
                         .padding(.bottom, 32)
 
@@ -90,6 +112,15 @@ struct DashboardView: View {
                                     .foregroundStyle(GGColors.textTertiary)
                                     .tightTracking()
                                 GGMomentumBar(scores: run.last7DayScores)
+                                HStack(spacing: 4) {
+                                    Text(run.momentumDirection.symbol)
+                                        .font(GGFonts.label)
+                                        .foregroundStyle(run.momentumDirection.color)
+                                    Text(run.momentumDirection.label)
+                                        .font(GGFonts.caption)
+                                        .foregroundStyle(run.momentumDirection.color)
+                                        .tightTracking()
+                                }
                             }
                         }
                         .padding(.horizontal, 24)
@@ -192,6 +223,19 @@ struct DashboardView: View {
                 }
                 .fullScreenCover(isPresented: $showNight) {
                     NightCheckInView(run: run)
+                }
+                .fullScreenCover(isPresented: $showRunComplete) {
+                    RunCompleteView(run: run) {
+                        run.hasSeenCompletionCeremony = true
+                        showRunComplete = false
+                    }
+                }
+                .onAppear {
+                    if run.dayNumber >= run.targetDays && !run.hasSeenCompletionCeremony {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            showRunComplete = true
+                        }
+                    }
                 }
             } else {
                 VStack {

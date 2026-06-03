@@ -4,6 +4,7 @@ import SwiftData
 enum LogSection: Hashable {
     case journal
     case reflections
+    case progress
 }
 
 struct LogView: View {
@@ -36,6 +37,7 @@ struct LogView: View {
                     switch section {
                     case .journal:     JournalSectionView()
                     case .reflections: ReflectionsSectionView()
+                    case .progress:    ProgressSectionView()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -50,7 +52,8 @@ private struct LogSegmentedControl: View {
 
     private let items: [(section: LogSection, label: String)] = [
         (.journal, "JOURNAL"),
-        (.reflections, "REFLECTIONS")
+        (.reflections, "REFLECTIONS"),
+        (.progress, "PROGRESS")
     ]
 
     var body: some View {
